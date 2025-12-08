@@ -159,10 +159,6 @@ public class TEditDesktopStyleWindow extends TWindow {
 
         List<String> buttonStyles = new ArrayList<String>();
         buttonStyles.add("square");
-        buttonStyles.add("round");
-        buttonStyles.add("diamond");
-        buttonStyles.add("arrowleft");
-        buttonStyles.add("arrowright");
         buttonStyle = addComboBox(2, 11, 18, buttonStyles, 0, 6,
             new TAction() {
                 public void DO() {

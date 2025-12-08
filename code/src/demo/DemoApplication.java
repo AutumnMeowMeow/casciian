@@ -252,7 +252,6 @@ public class DemoApplication extends TApplication {
             System.setProperty("casciian.TWindow.opacity", "80");
             System.setProperty("casciian.TImage.opacity", "80");
             System.setProperty("casciian.TTerminal.opacity", "80");
-            System.setProperty("casciian.TButton.style", "round");
 
             getTheme().setFemme();
             for (TWindow window: getAllWindows()) {
@@ -261,12 +260,6 @@ public class DemoApplication extends TApplication {
                 window.setBorderStyleMoving("round");
                 window.setBorderStyleInactive("round");
                 window.setAlpha(80 * 255 / 100);
-
-                for (TWidget widget: window.getChildren()) {
-                    if (widget instanceof TButton) {
-                        ((TButton) widget).setStyle(TButton.Style.ROUND);
-                    }
-                }
             }
             for (TMenu m: getAllMenus()) {
                 m.setBorderStyleForeground("round");
@@ -343,7 +336,6 @@ public class DemoApplication extends TApplication {
             System.setProperty("casciian.TWindow.opacity", "90");
             System.setProperty("casciian.TImage.opacity", "90");
             System.setProperty("casciian.TTerminal.opacity", "90");
-            System.setProperty("casciian.TButton.style", "diamond");
 
             getTheme().setQmodem5();
             for (TWindow window: getAllWindows()) {
@@ -352,12 +344,6 @@ public class DemoApplication extends TApplication {
                 window.setBorderStyleMoving("round");
                 window.setBorderStyleInactive("round");
                 window.setAlpha(90 * 255 / 100);
-
-                for (TWidget widget: window.getChildren()) {
-                    if (widget instanceof TButton) {
-                        ((TButton) widget).setStyle(TButton.Style.DIAMOND);
-                    }
-                }
             }
             for (TMenu m: getAllMenus()) {
                 m.setBorderStyleForeground("single");

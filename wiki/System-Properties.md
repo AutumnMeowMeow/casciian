@@ -592,12 +592,6 @@ Value can be one of the following:
 | Value      | Description                       |
 | ---------- | --------------------------------- |
 | square     | Square edges                      |
-| round      | Semicircle edges using images     |
-| diamond    | Diamond-angled edges using images |
-| arrowleft  | Arrow pointing left using images  |
-| arrowright | Arrow pointing right using images |
-| leftarrow  | Synonym for arrowleft             |
-| rightarrow | Synonym for arrowright            |
 
 
 casciian.TWindow.borderStyleForeground
