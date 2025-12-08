@@ -54,7 +54,6 @@ import casciian.bits.Cell;
 import casciian.bits.CellAttributes;
 import casciian.bits.ComplexCell;
 import casciian.bits.ExtendedGraphemeClusterUtils;
-import casciian.bits.GlyphMaker;
 import casciian.bits.ImageUtils;
 import casciian.event.TCommandEvent;
 import casciian.event.TInputEvent;
@@ -1652,48 +1651,6 @@ public class SwingTerminal extends LogicalScreen
                 gr.drawImage(image, xPixel, yPixel, swing.getFrame());
             } else {
                 gr.drawImage(image, xPixel, yPixel, swing.getComponent());
-            }
-            return;
-        }
-
-        GlyphMaker glyphMaker = GlyphMaker.getInstance(textHeight);
-        boolean useGlyphMaker = false;
-        if (cell.getDisplayWidth() == 2) {
-            // Always use fallback fonts for wide characters.
-            useGlyphMaker = true;
-        } else if (cell.getCodePointCount() == 1) {
-            int ch = cell.getChar();
-            // If a fallback font is available that can support Symbols for
-            // Legacy Computing, always use it.  This is for consistency --
-            // we assume the fallback font has better coverage than Terminus.
-            //
-            // Also use fallback font if the main font cannot display this
-            // glyph.
-            if (((ExtendedGraphemeClusterUtils.isLegacyComputingSymbol(ch)
-                        || ExtendedGraphemeClusterUtils.isBraille(ch))
-                    && glyphMaker.canDisplay(ch))
-                || !swing.getFont().canDisplay(ch)
-            ) {
-                useGlyphMaker = true;
-            }
-        }
-
-        if (useGlyphMaker) {
-            BufferedImage newImage = glyphMaker.getImage(cell,
-                textWidth * cell.getDisplayWidth(), textHeight,
-                getBackend(),
-                cursorBlinkVisible || (textBlinkOption == BlinkOption.OFF),
-                cell.getWidth());
-
-            if (swing.getFrame() != null) {
-                gr.drawImage(newImage, xPixel, yPixel, swing.getFrame());
-            } else {
-                gr.drawImage(newImage, xPixel, yPixel,
-                    swing.getComponent());
-            }
-
-            if (cell.isCacheable()) {
-                cacheCell(cell, newImage);
             }
             return;
         }

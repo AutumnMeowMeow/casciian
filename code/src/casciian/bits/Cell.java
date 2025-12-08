@@ -315,17 +315,8 @@ public class Cell extends CellAttributes {
             gr.setColor(SwingTerminal.attrToBackgroundColor(this));
         }
 
-        if (overGlyph) {
-            // Render this cell to a flat image.  The bad news is that we
-            // won't get to use the actual terminal's font.
-            GlyphMaker glyphMaker = GlyphMaker.getInstance(textHeight);
-            gr.drawImage(glyphMaker.getImage(this, textWidth, textHeight,
-                    backend), 0, 0, null, null);
-        } else {
-            // Put the background color behind the pixels.
-            gr.fillRect(0, 0, newImage.getWidth(),
-                newImage.getHeight());
-        }
+        // Put the background color behind the pixels.
+        gr.fillRect(0, 0, newImage.getWidth(), newImage.getHeight());
         gr.drawImage(image, 0, 0, null, null);
         gr.dispose();
         setImage(newImage);

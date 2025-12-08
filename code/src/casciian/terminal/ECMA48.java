@@ -44,7 +44,6 @@ import casciian.bits.Cell;
 import casciian.bits.CellAttributes;
 import casciian.bits.ComplexCell;
 import casciian.bits.ExtendedGraphemeClusterUtils;
-import casciian.bits.GlyphMaker;
 import casciian.bits.ImageUtils;
 import casciian.bits.StringUtils;
 import casciian.event.TInputEvent;
@@ -583,17 +582,6 @@ public class ECMA48 implements Runnable {
      * The height of a character cell in pixels.
      */
     private int textHeight = 20;
-
-    /**
-     * The last used height of a character cell in pixels, only used for
-     * full-width chars.
-     */
-    private int lastTextHeight = -1;
-
-    /**
-     * The glyph drawer for full-width chars.
-     */
-    private GlyphMaker glyphMaker = null;
 
     /**
      * Input queue for keystrokes and mouse events to send to the remote
@@ -1947,32 +1935,16 @@ public class ECMA48 implements Runnable {
             printCharacter(' ');
         }
 
-        BufferedImage image = null;
         ComplexCell cell = new ComplexCell(codePoints, currentState.attr);
-        if (lastTextHeight != textHeight) {
-            glyphMaker = GlyphMaker.getInstance(textHeight);
-            lastTextHeight = textHeight;
-        }
-        image = glyphMaker.getImage(cell,
-            textWidth * wcWidth, textHeight, backend, true);
-        BufferedImage leftImage = image.getSubimage(0, 0, textWidth,
-            textHeight);
-        ComplexCell left = new ComplexCell(cell);
-        left.setImage(leftImage, Math.abs(leftImage.hashCode()));
-        left.setOpaqueImage();
         if (wcWidth == 2) {
-            left.setWidth(Cell.Width.LEFT);
+            cell.setWidth(Cell.Width.LEFT);
         } else {
-            left.setWidth(Cell.Width.SINGLE);
+            cell.setWidth(Cell.Width.SINGLE);
         }
-        display.get(y).replace(x, left);
+        display.get(y).replace(x, cell);
 
         if (wcWidth == 2) {
-            BufferedImage rightImage = image.getSubimage(textWidth, 0,
-                textWidth, textHeight);
             ComplexCell right = new ComplexCell(cell);
-            right.setImage(rightImage, Math.abs(rightImage.hashCode()));
-            right.setOpaqueImage();
             right.setWidth(Cell.Width.RIGHT);
             display.get(y).replace(x + 1, right);
         }
@@ -8236,33 +8208,12 @@ public class ECMA48 implements Runnable {
 
         screenIsDirty = true;
 
-        if (lastTextHeight != textHeight) {
-            glyphMaker = GlyphMaker.getInstance(textHeight);
-            lastTextHeight = textHeight;
-        }
-
-        BufferedImage image = null;
         ComplexCell cell = new ComplexCell(ch, currentState.attr);
-        if (lastTextHeight != textHeight) {
-            glyphMaker = GlyphMaker.getInstance(textHeight);
-            lastTextHeight = textHeight;
-        }
-        image = glyphMaker.getImage(cell,
-            textWidth * 2, textHeight, backend, true);
-        BufferedImage leftImage = image.getSubimage(0, 0, textWidth,
-            textHeight);
-        BufferedImage rightImage = image.getSubimage(textWidth, 0, textWidth,
-            textHeight);
-
         ComplexCell left = new ComplexCell(cell);
-        left.setImage(leftImage, Math.abs(leftImage.hashCode()));
-        left.setOpaqueImage();
         left.setWidth(Cell.Width.LEFT);
         display.get(leftY).replace(leftX, left);
 
         ComplexCell right = new ComplexCell(cell);
-        right.setImage(rightImage, Math.abs(rightImage.hashCode()));
-        right.setOpaqueImage();
         right.setWidth(Cell.Width.RIGHT);
         display.get(rightY).replace(rightX, right);
     }
@@ -8990,31 +8941,6 @@ public class ECMA48 implements Runnable {
                         java.awt.Graphics gr = newImage.getGraphics();
                         gr.setColor(java.awt.Color.BLACK);
                         gr.drawImage(oldCell.getImage(), 0, 0, null, null);
-                        gr.drawImage(cells[x][y].getImage(), 0, 0, null, null);
-                        gr.dispose();
-                        cells[x][y].setImage(newImage);
-                        cells[x][y].isTransparentImage();
-                    } else if (false) {
-                        // This path would be good for the ECMA48 backend, as
-                        // it renders all images onto cells at once.  On the
-                        // Swing backend it can lead to multiple fonts and
-                        // kind of weird looking things, so leaving it
-                        // disabled.
-
-                        // Render the old cell text underneath this cell.
-                        if (lastTextHeight != textHeight) {
-                            glyphMaker = GlyphMaker.getInstance(textHeight);
-                            lastTextHeight = textHeight;
-                        }
-                        newImage = new BufferedImage(textWidth,
-                            textHeight, BufferedImage.TYPE_INT_ARGB);
-
-                        BufferedImage textImage = glyphMaker.getImage(oldCell,
-                            textWidth, textHeight, backend);
-
-                        java.awt.Graphics gr = newImage.getGraphics();
-                        gr.setColor(java.awt.Color.BLACK);
-                        gr.drawImage(textImage, 0, 0, null, null);
                         gr.drawImage(cells[x][y].getImage(), 0, 0, null, null);
                         gr.dispose();
                         cells[x][y].setImage(newImage);

@@ -5,10 +5,7 @@ TTerminal is a full-featured ECMA-48/ISO 6429/ANSI X3.64 type console
 window, including a scrollback buffer.  It implements nearly all of
 VT100, VT102, and VT220 faithfully, and enough of XTERM to support
 terminfo-based applications and Casciian itself.  TTerminal can spawn a
-login shell or run any arbitrary command in a shell window.  To the
-best of my knowledge, TTerminal is also the only terminal widget
-available that can produce true double-width/double-height and sixel
-images while running itself inside xterm.
+login shell or run any arbitrary command in a shell window.
 
 ptypipe
 -------
@@ -85,11 +82,6 @@ VT52 sub-mode support.  Casciian is (to the best of my knowledge) the
 only terminal multiplexer to support this:
 
 ![terminal_vttest_6](uploads/32d9df6af3f1d11d3ffffc5d700da690/terminal_vttest_6.png)
-
-Double-width / double-height support:
-
-![terminal_vttest_7](uploads/76f420ceaace4c65bd4cb1f051e57fe4/terminal_vttest_7.png)
-
 
 API
 ---

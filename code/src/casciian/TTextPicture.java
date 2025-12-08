@@ -14,8 +14,6 @@
  */
 package casciian;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,7 +24,6 @@ import java.util.List;
 import casciian.backend.ECMA48Terminal;
 import casciian.backend.SwingTerminal;
 import casciian.bits.Cell;
-import casciian.bits.GlyphMaker;
 import casciian.event.TKeypressEvent;
 import casciian.event.TMouseEvent;
 import casciian.event.TResizeEvent;
@@ -60,21 +57,6 @@ public class TTextPicture extends TScrollable implements TerminalListener {
      * If true, the terminal is not reading and is closed.
      */
     private boolean terminalClosed = true;
-
-    /**
-     * Double-height font.
-     */
-    private GlyphMaker doubleFont;
-
-    /**
-     * Last text width value.
-     */
-    private int lastTextWidth = -1;
-
-    /**
-     * Last text height value.
-     */
-    private int lastTextHeight = -1;
 
     /**
      * The last seen terminal state.
@@ -407,111 +389,8 @@ public class TTextPicture extends TScrollable implements TerminalListener {
     private void putDoubleWidthCharXY(final DisplayLine line, final int x,
         final int y, final Cell cell) {
 
-        int textWidth = getScreen().getTextWidth();
-        int textHeight = getScreen().getTextHeight();
-        boolean textBlinkVisible = true;
-
-        if (getScreen() instanceof SwingTerminal) {
-            SwingTerminal terminal = (SwingTerminal) getScreen();
-            textBlinkVisible = terminal.getCursorBlinkVisible();
-        } else if (getScreen() instanceof ECMA48Terminal) {
-            ECMA48Terminal terminal = (ECMA48Terminal) getScreen();
-            textBlinkVisible = terminal.getTextBlinkVisible();
-
-            if (!terminal.hasSixel()
-                && !terminal.hasJexerImages()
-                && !terminal.hasIterm2Images()
-            ) {
-                // The backend does not have images support, draw this as
-                // text and bail out.
-                putCharXY(x, y, cell);
-                putCharXY(x + 1, y, ' ', cell);
-                return;
-            }
-        } else {
-            // We don't know how to dray glyphs to this screen, draw them as
-            // text and bail out.
-            putCharXY(x, y, cell);
-            putCharXY(x + 1, y, ' ', cell);
-            return;
-        }
-
-        if ((textWidth != lastTextWidth) || (textHeight != lastTextHeight)) {
-            // Screen size has changed, reset the font.
-            setupFont(textHeight);
-            lastTextWidth = textWidth;
-            lastTextHeight = textHeight;
-        }
-        assert (doubleFont != null);
-
-        BufferedImage image;
-        if (line.getDoubleHeight() == 1) {
-            // Double-height top half: don't draw the underline.
-            Cell newCell = new Cell(cell);
-            newCell.setUnderline(false);
-            image = doubleFont.getImage(newCell, textWidth * 2, textHeight * 2,
-                getApplication().getBackend(), textBlinkVisible);
-        } else {
-            image = doubleFont.getImage(cell,  textWidth * 2, textHeight * 2,
-                getApplication().getBackend(), textBlinkVisible);
-        }
-
-        // Now that we have the double-wide glyph drawn, copy the right
-        // pieces of it to the cells.
-        Cell left = new Cell(cell);
-        Cell right = new Cell(cell);
-        right.setChar(' ');
-        BufferedImage leftImage = null;
-        BufferedImage rightImage = null;
-        /*
-        System.err.println("image " + image + " textWidth " + textWidth +
-            " textHeight " + textHeight);
-         */
-
-        switch (line.getDoubleHeight()) {
-        case 1:
-            // Top half double height
-            leftImage = image.getSubimage(0, 0, textWidth, textHeight);
-            rightImage = image.getSubimage(textWidth, 0, textWidth, textHeight);
-            break;
-        case 2:
-            // Bottom half double height
-            leftImage = image.getSubimage(0, textHeight, textWidth, textHeight);
-            rightImage = image.getSubimage(textWidth, textHeight,
-                textWidth, textHeight);
-            break;
-        default:
-            // Either single height double-width, or error fallback
-            BufferedImage wideImage = new BufferedImage(textWidth * 2,
-                textHeight, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D grWide = wideImage.createGraphics();
-            grWide.drawImage(image, 0, 0, wideImage.getWidth(),
-                wideImage.getHeight(), null);
-            grWide.dispose();
-            leftImage = wideImage.getSubimage(0, 0, textWidth, textHeight);
-            rightImage = wideImage.getSubimage(textWidth, 0, textWidth,
-                textHeight);
-            break;
-        }
-        left.setImage(leftImage);
-        right.setImage(rightImage);
-        // Since we have image data, ditch the character here.  Otherwise, a
-        // drawBoxShadow() over the terminal window will show the characters
-        // which looks wrong.
-        left.setChar(' ');
-        right.setChar(' ');
-        putCharXY(x, y, left);
-        putCharXY(x + 1, y, right);
-    }
-
-    /**
-     * Set up the double-width font.
-     *
-     * @param fontSize the size of font to request for the single-width font.
-     * The double-width font will be 2x this value.
-     */
-    private void setupFont(final int fontSize) {
-        doubleFont = GlyphMaker.getInstance(fontSize * 2);
+        putCharXY(x, y, cell);
+        putCharXY(x + 1, y, ' ', cell);
     }
 
 }

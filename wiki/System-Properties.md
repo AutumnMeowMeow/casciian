@@ -14,7 +14,6 @@ default values, below which is a more detailed outline.
 | casciian.hideMouseWhenTyping | false   | Hide mouse on keystroke everywhere  |
 | casciian.hideMenuBar         | false   | Hide the pull-down menu             |
 | casciian.hideStatusBar       | false   | Hide the status bar                 |
-| casciian.menuIcons           | true    | Use emoji icons in menu             |
 | casciian.cursorBlink         | on      | Allow blinking cursor               |
 | casciian.textBlink           | on      | Allow blinking text                 |
 | casciian.translucence        | true    | Translucent windows                 |
@@ -163,12 +162,6 @@ casciian.hideStatusBar
 Used by casciian.TApplication.  If true, do not display the status bar on
 the bottom row.  Status bar keyboard accelerators will still work.
 Default: false.
-
-casciian.menuIcons
-------------------
-
-Used by casciian.TApplication.  If true, support emoji icons next to
-drop-down menu items.  Default: true.
 
 casciian.cursorBlink
 --------------------

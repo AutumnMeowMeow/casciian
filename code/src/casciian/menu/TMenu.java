@@ -421,7 +421,7 @@ public class TMenu extends TWindow {
     /**
      * If true, draw icons with menu items.  Note package private access.
      */
-    boolean useIcons = true;
+    boolean useIcons = false;
 
     /**
      * If true, this is a context menu.

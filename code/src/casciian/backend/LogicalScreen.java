@@ -25,7 +25,6 @@ import casciian.bits.CellAttributes;
 import casciian.bits.CellTransform;
 import casciian.bits.ComplexCell;
 import casciian.bits.Clipboard;
-import casciian.bits.GlyphMaker;
 import casciian.bits.GraphicsChars;
 import casciian.bits.ImageUtils;
 import casciian.bits.StringUtils;
@@ -115,17 +114,6 @@ public class LogicalScreen implements Screen {
      * Cursor Y position if visible.
      */
     protected int cursorY;
-
-    /**
-     * The last used height of a character cell in pixels, only used for
-     * full-width chars.
-     */
-    private int lastTextHeight = -1;
-
-    /**
-     * The glyph drawer for full-width chars.
-     */
-    private GlyphMaker glyphMaker = null;
 
     // ------------------------------------------------------------------------
     // Constructors -----------------------------------------------------------
@@ -1289,43 +1277,13 @@ public class LogicalScreen implements Screen {
     private final void putFullwidthCharXY(final int x, final int y,
         final ComplexCell cell) {
 
-        if (false) {
+        ComplexCell left = new ComplexCell(cell);
+        left.setWidth(Cell.Width.LEFT);
+        putCharXY(x, y, left, true);
 
-            int cellWidth = getTextWidth();
-            int cellHeight = getTextHeight();
-
-            if (lastTextHeight != cellHeight) {
-                glyphMaker = GlyphMaker.getInstance(cellHeight);
-                lastTextHeight = cellHeight;
-            }
-            BufferedImage image = glyphMaker.getImage(cell, cellWidth * 2,
-                cellHeight, backend);
-            BufferedImage leftImage = image.getSubimage(0, 0, cellWidth,
-                cellHeight);
-            BufferedImage rightImage = image.getSubimage(cellWidth, 0, cellWidth,
-                cellHeight);
-
-            ComplexCell left = new ComplexCell(cell);
-            left.setImage(leftImage);
-            left.setWidth(Cell.Width.LEFT);
-            putCharXY(x, y, left, true);
-
-            ComplexCell right = new ComplexCell(cell);
-            right.setImage(rightImage);
-            right.setWidth(Cell.Width.RIGHT);
-            putCharXY(x + 1, y, right, true);
-
-        } else {
-
-            ComplexCell left = new ComplexCell(cell);
-            left.setWidth(Cell.Width.LEFT);
-            putCharXY(x, y, left, true);
-
-            ComplexCell right = new ComplexCell(cell);
-            right.setWidth(Cell.Width.RIGHT);
-            putCharXY(x + 1, y, right, true);
-        }
-
+        ComplexCell right = new ComplexCell(cell);
+        right.setWidth(Cell.Width.RIGHT);
+        putCharXY(x + 1, y, right, true);
     }
 
     /**

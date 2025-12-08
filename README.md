@@ -46,15 +46,6 @@ Casciian has seen inspiration from several other projects:
 
 
 
-Screenshots
------------
-
-![Gradients in translucent windows with images](/screenshots/gradient1.png?raw=true "Gradients in translucent windows with images")
-
-![Casciian with Spanish-language translations, CJK text in terminal, the libsixel snake image, and an ANSI art screen](/screenshots/casciian_espanol.png?raw=true "Casciian with Spanish-language translations, CJK text in terminal, the libsixel snake image, and an ANSI art screen")
-
-
-
 Copyright Status
 ----------------
 

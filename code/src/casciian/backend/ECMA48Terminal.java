@@ -48,7 +48,6 @@ import casciian.bits.CellAttributes;
 import casciian.bits.Color;
 import casciian.bits.ComplexCell;
 import casciian.bits.ExtendedGraphemeClusterUtils;
-import casciian.bits.GlyphMaker;
 import casciian.bits.ImageUtils;
 import casciian.bits.StringUtils;
 import casciian.event.TCommandEvent;
@@ -1937,50 +1936,12 @@ public class ECMA48Terminal extends LogicalScreen
          * the cell height.
          */
         int glyphFontSize = Math.max(4, getTextHeight() - 4);
-        GlyphMaker glyphMaker = GlyphMaker.getInstance(glyphFontSize);
         for (int y = 0; y < height; y++) {
             boolean unsetRow = false;
             boolean eraseImagesOnRow = false;
             for (int x = 0; x < width; x++) {
                 ComplexCell lCell = logical[x][y];
                 ComplexCell pCell = physical[x][y];
-
-                if (!lCell.isImage()) {
-                    boolean useGlyphMaker = false;
-                    if ((lCell.getDisplayWidth() == 2) && wideCharImages) {
-                        // Use fallback fonts for wide characters.
-                        useGlyphMaker = true;
-                    } else if (lCell.getCodePointCount() == 1) {
-                        int ch = lCell.getChar();
-                        // If a fallback font is available that can support
-                        // Symbols for Legacy Computing, always use it.  This
-                        // is for consistency -- we assume the fallback font
-                        // has better coverage than Terminus.
-                        if (((ExtendedGraphemeClusterUtils.isLegacyComputingSymbol(ch)
-                                    || ExtendedGraphemeClusterUtils.isBraille(ch)
-                                    || ExtendedGraphemeClusterUtils.isJexerDefaultGlyph(ch))
-                                && glyphMaker.canDisplay(ch))
-                        ) {
-                            useGlyphMaker = true;
-                        }
-                    }
-
-                    if (useGlyphMaker) {
-                        BufferedImage newImage = null;
-                        newImage = glyphCache.get(lCell);
-                        if (newImage == null) {
-                            newImage = glyphMaker.getImage(lCell,
-                                getTextWidth() * lCell.getDisplayWidth(),
-                                getTextHeight(), getBackend(), false,
-                                lCell.getWidth());
-
-                            ComplexCell key = new ComplexCell(lCell);
-                            glyphCache.put(key, newImage);
-                        }
-                        lCell.setImage(newImage);
-                        unsetRow = true;
-                    }
-                }
 
                 // If physical has image data that will be overwritten by
                 // text, then erase all of the images on this row for
