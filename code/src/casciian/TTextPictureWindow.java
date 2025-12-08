@@ -14,11 +14,7 @@
  */
 package casciian;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ResourceBundle;
-import javax.imageio.ImageIO;
 
 import casciian.event.TKeypressEvent;
 import casciian.event.TMouseEvent;

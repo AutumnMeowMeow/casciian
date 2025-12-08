@@ -38,7 +38,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import casciian.bits.MathUtils;
-import casciian.terminal.SixelDecoder;
 
 /**
  * HQSixelEncoder turns a BufferedImage into String of sixel image data,
@@ -58,15 +57,6 @@ public class HQSixelEncoder implements SixelEncoder {
     // ------------------------------------------------------------------------
     // Constants --------------------------------------------------------------
     // ------------------------------------------------------------------------
-
-    /**
-     * Available custom palettes to use in HQSixelEncoder.
-     */
-    private enum CustomSixelPalette {
-        NONE,
-        VT340,
-        CGA,
-    }
 
     /**
      * Alpha value (0 - 255) above which to consider the pixel opaque.
@@ -737,12 +727,9 @@ public class HQSixelEncoder implements SixelEncoder {
          * @param image a bitmap image
          * @param allowTransparent if true, allow transparent pixels to be
          * specified
-         * @param customPalette if set, use a specific palette instead of
-         * direct map or median cut
          */
         public Palette(final int size, final BufferedImage image,
-            final boolean allowTransparent,
-            final HashMap<Integer, Color> customPalette) {
+            final boolean allowTransparent) {
 
             assert (size >= 2);
             assert (image.getWidth() > 0);
@@ -760,9 +747,6 @@ public class HQSixelEncoder implements SixelEncoder {
                 // result, but might not be noticeable for fast-moving
                 // scenes.
                 numColors = Math.min(paletteSize, FAST_AND_DIRTY);
-            }
-            if (customPalette != null) {
-                numColors = customPalette.size();
             }
             sixelColors = new ArrayList<Integer>(numColors);
             usedColors = new BitSet(numColors);
@@ -903,41 +887,13 @@ public class HQSixelEncoder implements SixelEncoder {
             /*
              * Here we choose between several options:
              *
-             * - If a custom palette was specified, use it.
-             *
              * - If the palette size is big enough for the number of colors,
              *   and we know that because we sampled every pixel (stride ==
              *   0), then just do a straight 1-1 mapping.
              *
              * - Otherwise use median cut.
              */
-            if (customPalette != null) {
-                quantizationType = 1;
-                List<Integer> keys = new ArrayList<Integer>(customPalette.keySet());
-                Collections.sort(keys);
-                for (Integer idx: keys) {
-                    int colorRGB = customPalette.get(idx).getRGB();
-                    int sixelRGB = toSixelColor(colorRGB, true);
-                    sixelColors.add(sixelRGB);
-                }
-                quantizationDone = true;
-                if (verbosity >= 5) {
-                    System.err.printf("COLOR MAP: %d entries\n",
-                        sixelColors.size());
-                    for (int i = 0; i < sixelColors.size(); i++) {
-                        System.err.printf("   %03d %08x\n", i,
-                            sixelColors.get(i));
-                    }
-                }
-
-                if (timings != null) {
-                    timings.buildColorMapTime = System.nanoTime();
-                }
-
-                // Now that colors have been established, build the search
-                // structure for them.
-                buildSearchMap();
-            } else if ((stride == 0) && (colorMap.size() <= numColors)) {
+            if ((stride == 0) && (colorMap.size() <= numColors)) {
                 quantizationType = 0;
                 directMap();
             } else if (true || (colorMap.size() <= numColors * 10)) {
@@ -1806,11 +1762,6 @@ public class HQSixelEncoder implements SixelEncoder {
     private boolean fastAndDirty = false;
 
     /**
-     * Available custom palettes.
-     */
-    private CustomSixelPalette customSixelPalette = CustomSixelPalette.NONE;
-
-    /**
      * If true, don't emit palette colors.
      */
     private boolean suppressEmitPalette = false;
@@ -1840,21 +1791,8 @@ public class HQSixelEncoder implements SixelEncoder {
      */
     @Override
     public String toSixel(final BufferedImage bitmap) {
-        HashMap<Integer, Color> customPalette = null;
-        switch (customSixelPalette) {
-        case CGA:
-            customPalette = new HashMap<Integer, Color>(16);
-            SixelDecoder.initializePaletteCGA(customPalette);
-            break;
-        case VT340:
-            customPalette = new HashMap<Integer, Color>(16);
-            SixelDecoder.initializePaletteVT340(customPalette);
-            break;
-        case NONE:
-            break;
-        }
-
-        return toSixel(bitmap, false, customPalette, suppressEmitPalette);
+        return toSixelResult(bitmap, false,
+            suppressEmitPalette).encodedImage;
     }
 
     // ------------------------------------------------------------------------
@@ -1899,15 +1837,6 @@ public class HQSixelEncoder implements SixelEncoder {
             fastAndDirty = false;
         }
 
-        customSixelPalette = CustomSixelPalette.NONE;
-        String customPaletteStr = System.getProperty("casciian.ECMA48.sixelCustomPalette",
-            "none").toLowerCase();
-        if (customPaletteStr.equals("cga")) {
-            customSixelPalette = CustomSixelPalette.CGA;
-        } else if (customPaletteStr.equals("vt340")) {
-            customSixelPalette = CustomSixelPalette.VT340;
-        }
-
         String emitPaletteStr = System.getProperty("casciian.ECMA48.sixelEmitPalette",
             "true").toLowerCase();
         if (emitPaletteStr.equals("false")) {
@@ -1927,58 +1856,8 @@ public class HQSixelEncoder implements SixelEncoder {
     public String toSixel(final BufferedImage bitmap,
         final boolean allowTransparent) {
 
-        HashMap<Integer, Color> customPalette = null;
-        switch (customSixelPalette) {
-        case CGA:
-            customPalette = new HashMap<Integer, Color>(16);
-            SixelDecoder.initializePaletteCGA(customPalette);
-            break;
-        case VT340:
-            customPalette = new HashMap<Integer, Color>(16);
-            SixelDecoder.initializePaletteVT340(customPalette);
-            break;
-        case NONE:
-            break;
-        }
-
-        return toSixel(bitmap, allowTransparent, customPalette,
-            suppressEmitPalette);
-    }
-
-    /**
-     * Create a sixel string representing a bitmap.  The returned string does
-     * NOT include the DCS start or ST end sequences.
-     *
-     * @param bitmap the bitmap data
-     * @param customPalette if set, use a specific palette instead of direct
-     * map or median cut
-     * @return the string to emit to an ANSI / ECMA-style terminal
-     */
-    public String toSixel(final BufferedImage bitmap,
-        final HashMap<Integer, Color> customPalette) {
-
-        return toSixel(bitmap, false, customPalette, suppressEmitPalette);
-    }
-
-    /**
-     * Create a sixel string representing a bitmap.  The returned string does
-     * NOT include the DCS start or ST end sequences.
-     *
-     * @param bitmap the bitmap data
-     * @param allowTransparent if true, allow transparent pixels to be
-     * specified
-     * @param customPalette if set, use a specific palette instead of direct
-     * map or median cut
-     * @param suppressEmitPalette if set, do not emit the sixel palette
-     * @return the string to emit to an ANSI / ECMA-style terminal
-     */
-    public String toSixel(final BufferedImage bitmap,
-        final boolean allowTransparent,
-        final HashMap<Integer, Color> customPalette,
-        final boolean suppressEmitPalette) {
-
         return toSixelResult(bitmap, allowTransparent,
-            customPalette, suppressEmitPalette).encodedImage;
+            suppressEmitPalette).encodedImage;
     }
 
     /**
@@ -1988,15 +1867,11 @@ public class HQSixelEncoder implements SixelEncoder {
      * @param bitmap the bitmap data
      * @param allowTransparent if true, allow transparent pixels to be
      * specified
-     * @param customPalette if set, use a specific palette instead of direct
-     * map or median cut
      * @param suppressEmitPalette if set, do not emit the sixel palette
      * @return the encoded string and transparency flag
      */
     private SixelResult toSixelResult(final BufferedImage bitmap,
-        final boolean allowTransparent,
-        final HashMap<Integer, Color> customPalette,
-        final boolean suppressEmitPalette) {
+        final boolean allowTransparent, final boolean suppressEmitPalette) {
 
         // Start with 16k potential total output.
         StringBuilder sb = new StringBuilder(16384);
@@ -2007,8 +1882,7 @@ public class HQSixelEncoder implements SixelEncoder {
         SixelResult result = new SixelResult();
 
         // Anaylze the picture and generate a palette.
-        Palette palette = new Palette(paletteSize, bitmap, allowTransparent,
-            customPalette);
+        Palette palette = new Palette(paletteSize, bitmap, allowTransparent);
         result.palette = palette;
         result.transparent = palette.transparent;
 
@@ -2236,7 +2110,6 @@ public class HQSixelEncoder implements SixelEncoder {
         int successCount = 0;
         boolean allowTransparent = true;
         boolean performance = false;
-        HashMap<Integer, Color> customPalette = null;
         if (encoder.hasSharedPalette()) {
             System.out.print("\033[?1070l");
         } else {
@@ -2245,16 +2118,6 @@ public class HQSixelEncoder implements SixelEncoder {
         System.out.flush();
 
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-vt340")) {
-                customPalette = new HashMap<Integer, Color>();
-                SixelDecoder.initializePaletteVT340(customPalette);
-                continue;
-            }
-            if (args[i].equals("-cga")) {
-                customPalette = new HashMap<Integer, Color>();
-                SixelDecoder.initializePaletteCGA(customPalette);
-                continue;
-            }
             if ((i == 0) && args[i].equals("-v")) {
                 encoder.verbosity = 1;
                 encoder.doTimings = true;
@@ -2286,7 +2149,7 @@ public class HQSixelEncoder implements SixelEncoder {
                     // Put together the image.
                     StringBuilder sb = new StringBuilder();
                     SixelResult result = encoder.toSixelResult(image,
-                        allowTransparent, customPalette, false);
+                        allowTransparent, false);
                     sb.append(result.encodedImage);
                     sb.append("\033\\");
                     // If there are transparent pixels, we need to note that

@@ -45,7 +45,6 @@ default values, below which is a more detailed outline.
 | casciian.TEditor.hideMouseWhenTyping | true | Hide mouse on keystroke in text editor windows |
 | casciian.TEditor.margin      | 0       | Right column margin to highlight    |
 | casciian.TEditor.autoWrap    | false   | Automatically wrap text to margin   |
-| casciian.TImage.bleedThrough | true    | Text "bleeds through" image holes   |
 | casciian.TTerminal.closeOnExit | false | Close terminal window when shell exits    |
 | casciian.TTerminal.hideMouseWhenTyping | true | Hide mouse on keystroke in terminal windows |
 | casciian.TTerminal.ptypipe   | auto    | Use 'ptypipe' for terminal shell    |
@@ -57,11 +56,9 @@ default values, below which is a more detailed outline.
 | casciian.ECMA48.modifyOtherKeys | false  | ECMA48: detect other modifiers    |
 | casciian.ECMA48.rgbColor     | false   | ECMA48: emit 24-bit RGB for system colors    |
 | casciian.ECMA48.textBlink    | auto    | ECMA48: Allow/simulate blinking text|
-| casciian.ECMA48.wideCharImages | true  | ECMA48: draw CJK/emoji as images    |
 | casciian.ECMA48.sixel        | true    | ECMA48: draw images using sixel     |
 | casciian.ECMA48.sixelEncoder | hq      | ECMA48: sixel encoder to use        |
 | casciian.ECMA48.sixelPaletteSize | 1024 (legacy), 256 (hq) | ECMA48: number of colors for sixel images |
-| casciian.ECMA48.sixelCustomPalette | none | ECMA48: option to use CGA or VT340 colors |
 | casciian.ECMA48.sixelEmitPalette | true | ECMA48: emit sixel palette colors  |
 | casciian.ECMA48.sixelSharedPalette | true | ECMA48: shared palette for sixel images (legacy only) |
 | casciian.ECMA48.iTerm2Images | false   | ECMA48: draw images using iTerm2 protocol    |
@@ -273,15 +270,6 @@ casciian.TEditor.autoWrap
 Used by casciian.TEditorWindow.  If true, automatically wrap the text to
 fit inside the margin.  Default: false.
 
-casciian.TImage.bleedThrough
-----------------------------
-
-Used by casciian.TImage.  If true, then image cells that are fully
-covered by a single color will be replaced by empty text cells of that
-color.  This will permit text "behind" that cell to bleed through if
-translucence is enabled and opacity for the window the image is on is
-less than 100.  Default: true.
-
 casciian.TTerminal.closeOnExit
 ------------------------------
 
@@ -387,14 +375,6 @@ Value can be one of the following:
 
 Default: auto.
 
-casciian.ECMA48.wideCharImages
-------------------------------
-
-Used by casciian.backend.ECMA48Terminal.  If true, draw wide characters
-(fullwidth characters) as used by CJK and emoji as images.  This looks
-better on terminals loaded without a CJK font, but requires sixel
-support.  Default: true.
-
 casciian.ECMA48.sixel
 ---------------------
 
@@ -439,20 +419,6 @@ For the legacy encoder, values are: 2 (black-and-white), 256, 512,
 
 For the hq encoder, values are: 2 (black-and-white), 4, 8, 16, 32, 64,
 128, 256, 512, 1024, or 2048; default is 256.
-
-casciian.ECMA48.sixelCustomPalette
-----------------------------------
-
-Used by casciian.backend.ECMA48Terminal, only for the hq sixel encoder.
-Default: none.
-
-Value can be one of the following:
-
-| Value | Description                                             |
-| ----- | ------------------------------------------------------- |
-| none  | Generate custom high-quality colors for every image     |
-| cga   | Use only 16 colors, set to match CGA / DOS              |
-| vt340 | Use only 16 colors, set to match the DEC VT340 terminal |
 
 casciian.ECMA48.sixelEmitPalette
 --------------------------------

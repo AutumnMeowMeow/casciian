@@ -1304,10 +1304,6 @@ public class TApplication implements Runnable {
             doRepaint();
             return true;
         }
-        if (menu.getId() == TMenu.MID_VIEW_IMAGE) {
-            openImage();
-            return true;
-        }
         if (menu.getId() == TMenu.MID_VIEW_ANSI) {
             openAnsiFile();
             return true;
@@ -2496,27 +2492,6 @@ public class TApplication implements Runnable {
         messageBox(i18n.getString("aboutDialogTitle"),
             MessageFormat.format(i18n.getString("aboutDialogText"), version),
             TMessageBox.Type.OK);
-    }
-
-    /**
-     * Handle the Tool | Open image menu item.
-     */
-    private void openImage() {
-        try {
-            List<String> filters = new ArrayList<String>();
-            filters.add("^.*\\.[Jj][Pp][Gg]$");
-            filters.add("^.*\\.[Jj][Pp][Ee][Gg]$");
-            filters.add("^.*\\.[Pp][Nn][Gg]$");
-            filters.add("^.*\\.[Gg][Ii][Ff]$");
-            filters.add("^.*\\.[Bb][Mm][Pp]$");
-            String filename = fileOpenBox(".", TFileOpenBox.Type.OPEN, filters);
-            if (filename != null) {
-                new TImageWindow(this, new File(filename));
-            }
-        } catch (IOException e) {
-            // Show this exception to the user.
-            new TExceptionDialog(this, e);
-        }
     }
 
     /**
@@ -4352,7 +4327,6 @@ public class TApplication implements Runnable {
         TMenu toolMenu = addMenu(i18n.getString("toolMenuTitle"));
         toolMenu.addDefaultItem(TMenu.MID_REPAINT);
         toolMenu.addSeparator();
-        toolMenu.addDefaultItem(TMenu.MID_VIEW_IMAGE);
         toolMenu.addDefaultItem(TMenu.MID_VIEW_ANSI);
         toolMenu.addDefaultItem(TMenu.MID_SCREEN_OPTIONS);
         toolMenu.addSeparator();

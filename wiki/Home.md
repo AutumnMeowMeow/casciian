@@ -46,8 +46,6 @@ Widget Gallery
 * [TFileOpenBox](widget-tfileopenbox)
 * [THelpWindow](widget-thelpwindow)
 * [THScroller](widget-thscroller)
-* [TImage](widget-timage)
-* [TImageWindow](widget-timagewindow)
 * [TInputBox](widget-tinputbox)
 * [TLabel](widget-tlabel)
 * [TList](widget-tlist)

@@ -90,11 +90,6 @@ public class TScreenOptionsWindow extends TWindow {
     private TComboBox sixelPaletteSize;
 
     /**
-     * The wideCharImages option.
-     */
-    private TCheckBox wideCharImages;
-
-    /**
      * Triple-buffer support.
      */
     private TCheckBox tripleBuffer;
@@ -163,11 +158,6 @@ public class TScreenOptionsWindow extends TWindow {
      * The original sixel palette (number of colors) value.
      */
     private int oldSixelPaletteSize = 1024;
-
-    /**
-     * The original wideCharImages value.
-     */
-    private boolean oldWideCharImages = true;
 
     /**
      * The original triple-buffer support.
@@ -398,11 +388,6 @@ public class TScreenOptionsWindow extends TWindow {
                 System.getProperty("casciian.ECMA48.sixelSharedPalette",
                     "true").equals("true")));
         oldSixelSharedPalette = sixelSharedPalette.isChecked();
-        wideCharImages = addCheckBox(3, 18, i18n.getString("wideCharImages"),
-            (ecmaTerminal != null ? ecmaTerminal.isWideCharImages() :
-                System.getProperty("casciian.ECMA48.wideCharImages",
-                    "true").equals("true")));
-        oldWideCharImages = wideCharImages.isChecked();
         rgbColor = addCheckBox(3, 19, i18n.getString("rgbColor"),
             (ecmaTerminal != null ? ecmaTerminal.isRgbColor() :
                 System.getProperty("casciian.ECMA48.rgbColor",
@@ -424,7 +409,6 @@ public class TScreenOptionsWindow extends TWindow {
             addLabel(i18n.getString("unavailable"), col, 16);
             sixel.setEnabled(false);
             sixelSharedPalette.setEnabled(false);
-            wideCharImages.setEnabled(false);
             rgbColor.setEnabled(false);
         }
 
@@ -853,8 +837,6 @@ public class TScreenOptionsWindow extends TWindow {
                         ecmaTerminal.setHasSixel(sixel.isChecked());
                         ecmaTerminal.setSixelSharedPalette(sixelSharedPalette.
                             isChecked());
-                        ecmaTerminal.setWideCharImages(wideCharImages.
-                            isChecked());
                         ecmaTerminal.setRgbColor(rgbColor.isChecked());
                     }
                     if (terminal != null) {
@@ -889,7 +871,6 @@ public class TScreenOptionsWindow extends TWindow {
                         ecmaTerminal.setHasSixel(oldSixel);
                         ecmaTerminal.setSixelSharedPalette(oldSixelSharedPalette);
                         ecmaTerminal.setSixelPaletteSize(oldSixelPaletteSize);
-                        ecmaTerminal.setWideCharImages(oldWideCharImages);
                         ecmaTerminal.setRgbColor(oldRgbColor);
                     }
                     getApplication().setWindowOpacity(oldWindowOpacity);
@@ -934,7 +915,6 @@ public class TScreenOptionsWindow extends TWindow {
                 ecmaTerminal.setHasSixel(oldSixel);
                 ecmaTerminal.setSixelSharedPalette(oldSixelSharedPalette);
                 ecmaTerminal.setSixelPaletteSize(oldSixelPaletteSize);
-                ecmaTerminal.setWideCharImages(oldWideCharImages);
                 ecmaTerminal.setRgbColor(oldRgbColor);
             }
             getApplication().setWindowOpacity(oldWindowOpacity);

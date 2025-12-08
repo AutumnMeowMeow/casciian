@@ -196,11 +196,6 @@ public class ECMA48Terminal extends LogicalScreen
     private TResizeEvent windowResize = null;
 
     /**
-     * If true, emit wide-char (CJK/Emoji) characters as sixel images.
-     */
-    private boolean wideCharImages = true;
-
-    /**
      * Window width in pixels.  Used for image support.
      */
     private int widthPixels = 640;
@@ -1197,14 +1192,6 @@ public class ECMA48Terminal extends LogicalScreen
         // Request xterm use the sixel settings we want
         this.output.printf("%s", xtermSetSixelSettings());
 
-        // Default to using images for full-width characters.
-        if (System.getProperty("casciian.ECMA48.wideCharImages",
-                "true").equals("true")) {
-            wideCharImages = true;
-        } else {
-            wideCharImages = false;
-        }
-
         if (!daResponseSeen) {
             String str = System.getProperty("casciian.ECMA48.iTerm2Images");
             // Default to not supporting iTerm2 images.
@@ -1890,11 +1877,8 @@ public class ECMA48Terminal extends LogicalScreen
                 }
 
                 // Emit the character
-                if (wideCharImages
+                if (lCell.getWidth() != Cell.Width.RIGHT) {
                     // Don't emit the right-half of full-width chars.
-                    || (!wideCharImages
-                        && (lCell.getWidth() != Cell.Width.RIGHT))
-                ) {
                     sb.append(lCell.toCharArray());
                 }
 
@@ -3766,26 +3750,6 @@ public class ECMA48Terminal extends LogicalScreen
     // ------------------------------------------------------------------------
     // Sixel output support ---------------------------------------------------
     // ------------------------------------------------------------------------
-
-    /**
-     * Get the wideCharImages flag.
-     *
-     * @return true if fullwidth characters (e.g. CJK) are being drawn as
-     * images
-     */
-    public boolean isWideCharImages() {
-        return wideCharImages;
-    }
-
-    /**
-     * Set the wideCharImages flag.
-     *
-     * @param wideCharImages if true, draw fullwidth characters (e.g. CJK) as
-     * images
-     */
-    public void setWideCharImages(final boolean wideCharImages) {
-        this.wideCharImages = wideCharImages;
-    }
 
     /**
      * Get the rgbColor flag.
