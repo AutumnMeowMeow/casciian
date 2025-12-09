@@ -58,11 +58,6 @@ public class TMenu extends TWindow {
     public static final int MID_VIEW_ANSI       = 3;
 
     /**
-     * Screen options.
-     */
-    public static final int MID_SCREEN_OPTIONS  = 4;
-
-    /**
      * Trigger text cursor glint effect.
      */
     public static final int MID_TEXT_CURSOR_GLINT       = 5;
@@ -906,11 +901,6 @@ public class TMenu extends TWindow {
         case MID_VIEW_ANSI:
             label = i18n.getString("menuViewAnsiArt");
             icon = 0x1F4F0;
-            break;
-
-        case MID_SCREEN_OPTIONS:
-            label = i18n.getString("menuScreenOptions");
-            icon = 0x1F527;
             break;
 
         case MID_TEXT_CURSOR_GLINT:

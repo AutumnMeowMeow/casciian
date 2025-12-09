@@ -27,8 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import casciian.backend.ECMA48Terminal;
-import casciian.backend.SwingTerminal;
 import casciian.bits.Cell;
 import casciian.bits.Clipboard;
 import casciian.bits.ComplexCell;

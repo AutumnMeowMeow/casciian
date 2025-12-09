@@ -317,46 +317,6 @@ public class ExtendedGraphemeClusterUtils {
     }
 
     /**
-     * Check if character is a less-common Unicode symbol that is used by a
-     * default Casciian user interface component.
-     *
-     * @param ch character to check
-     * @return true if this character used in the default Casciian user
-     * interface somewhere
-     */
-    public static boolean isJexerDefaultGlyph(final int ch) {
-        // These are primarily menu item icons.
-        if (false
-            || (ch == 0x2195)
-            || (ch == 0x229E)
-            || (ch == 0x261D)
-            || (ch == 0x263C)
-            || (ch == 0x2B6E)
-            || (ch == 0x2B6F)
-            || (ch == 0x1F3A8)
-            || (ch == 0x1F4CB)
-            || (ch == 0x1F4F0)
-            || (ch == 0x1F50D)
-            || (ch == 0x1F527)
-            || (ch == 0x1F5AE)
-            || (ch == 0x1F5BC)
-            || (ch == 0x1F5C1)
-            || (ch == 0x1F5CE)
-            || (ch == 0x1F5D0)
-            || (ch == 0x1F5D7)
-            || (ch == 0x1F5D9)
-            || (ch == 0x1F5F6)
-
-            // Demo text
-            || (ch == 0x25CE)
-
-        ) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Check if codepoint has the Prepend Grapheme_Cluster_Break property.
      *
      * @param ch character to check

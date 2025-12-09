@@ -17,7 +17,7 @@ package demo;
 import casciian.*;
 
 /**
- * This class is the main driver for a simple demonstration of Jexer's
+ * This class is the main driver for a simple demonstration of Casciian's
  * capabilities.  This one shows TDesktop and TWindow API details.
  */
 public class Demo4 {
@@ -42,23 +42,8 @@ public class Demo4 {
      */
     public static void main(final String [] args) {
         try {
-            // Swing is the default backend on Windows unless explicitly
-            // overridden by casciian.Swing.
-            TApplication.BackendType backendType = TApplication.BackendType.XTERM;
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                backendType = TApplication.BackendType.SWING;
-            }
-            if (System.getProperty("os.name").startsWith("Mac")) {
-                backendType = TApplication.BackendType.SWING;
-            }
-            if (System.getProperty("casciian.Swing") != null) {
-                if (System.getProperty("casciian.Swing", "false").equals("true")) {
-                    backendType = TApplication.BackendType.SWING;
-                } else {
-                    backendType = TApplication.BackendType.XTERM;
-                }
-            }
-            DesktopDemoApplication app = new DesktopDemoApplication(backendType);
+            DesktopDemoApplication app;
+            app = new DesktopDemoApplication(TApplication.BackendType.XTERM);
             (new Thread(app)).start();
         } catch (Exception e) {
             e.printStackTrace();

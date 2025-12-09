@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 import casciian.net.TelnetServerSocket;
 
 /**
- * This class is the main driver for a simple demonstration of Jexer's
+ * This class is the main driver for a simple demonstration of Casciian's
  * capabilities.  Rather than run locally, it serves a Casciian UI over a TCP
  * port.
  */

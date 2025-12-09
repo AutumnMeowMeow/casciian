@@ -14,7 +14,6 @@
  */
 package casciian.layout;
 
-import java.awt.Rectangle;
 import java.util.HashMap;
 
 import casciian.TWidget;
@@ -25,6 +24,27 @@ import casciian.event.TResizeEvent;
  * when added and the current widget size.
  */
 public class StretchLayoutManager implements LayoutManager {
+
+    // ------------------------------------------------------------------------
+    // Constants --------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /**
+     * A simple rectangle class.
+     */
+    private class Rectangle {
+        double x;
+        double y;
+        double width;
+        double height;
+
+        Rectangle(final int x, final int y, final int width, final int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+    }
 
     // ------------------------------------------------------------------------
     // Variables --------------------------------------------------------------
@@ -147,10 +167,10 @@ public class StretchLayoutManager implements LayoutManager {
         }
         for (TWidget child: children.keySet()) {
             Rectangle rect = children.get(child);
-            child.setDimensions((int) (rect.getX() * widthRatio),
-                (int) (rect.getY() * heightRatio),
-                (int) (rect.getWidth() * widthRatio),
-                (int) (rect.getHeight() * heightRatio));
+            child.setDimensions((int) (rect.x * widthRatio),
+                (int) (rect.y * heightRatio),
+                (int) (rect.width * widthRatio),
+                (int) (rect.height * heightRatio));
         }
     }
 

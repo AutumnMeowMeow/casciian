@@ -11,7 +11,7 @@ The Big Picture
 
 ```mermaid
 graph RL;
-  X(Physical Keyboard) --> T(ECMA48Terminal / SwingTerminal)
+  X(Physical Keyboard) --> T(ECMA48Terminal)
   Y(Physical Mouse) --> T
   T -- flushPhysical --> Z(Physical Screen);
   T -- getEvents --> B(Backend);
@@ -48,15 +48,14 @@ and updates to the *screen*:
   has functions for drawing characters, strings, and lines to a
   logical screen buffer.  When it is time to push that logical buffer
   to the physical screen, Screen.flushPhysical() is called.  The
-  SwingTerminal and ECMA48Terminal (Xterm) backends have logic to
-  reduce the amount of actual data that must be drawn or emitted to
-  the terminal.
+  ECMA48Terminal (Xterm) backend has logic to reduce the amount of
+  actual data that must be drawn or emitted to the terminal.
 
 Pictorially, the data flow looks like this:
 
 ```mermaid
 graph RL;
-  X(Physical Keyboard) --> T(ECMA48Terminal / SwingTerminal)
+  X(Physical Keyboard) --> T(ECMA48Terminal)
   Y(Physical Mouse) --> T
   T -- flushPhysical --> Z(Physical Screen);
   T -- getEvents --> B(Backend);
@@ -82,13 +81,10 @@ Screen and Backend are both interfaces, so interesting things can be
 done by composition:
 
 * MultiBackend and MultiScreen multiplex a single TApplication to
-  multiple terminals.  This is demonstrated by casciian.demos.Demo6: a
-  single TApplication has *three* screens that can manipulate it: one
-  Swing screen, one ECMA48 screen, and another Swing screen showing
-  the application running inside a window.  Keyboard and mouse events
-  from any of these screens will update all of them at once.  One
-  could use MultiBackend/MultiScreen to build a detachable
-  long-running application.
+  multiple terminals.  Keyboard and mouse events from any of these
+  screens will update all of them at once.  One could use
+  MultiBackend/MultiScreen to build a detachable long-running
+  application.
 
 * TWindowBackend performs user I/O of a Backend within the window of a
   different TApplication.
@@ -150,10 +146,6 @@ The text cell model is this:
   widget/window draw in reverse-Z-order (the coordinate space is
   right-handed, so positive Z is away from the user).  Any Cell can
   cover any other Cell during this.
-
-* For a GUI/Swing screen, Casciian has to build the whole frame (Swing by
-  default is triple-buffered) and then push the frame to the actual
-  OS.
 
 * For an Xterm screen, ideally only the changed Cells will be output.
   Casciian will use Synchronized Output when it detects support for

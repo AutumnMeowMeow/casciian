@@ -289,8 +289,8 @@ public class TEditDesktopStyleWindow extends TWindow {
         BorderStyle style = BorderStyle.getStyle(borderStyleName);
 
         if (borderStyleName.toLowerCase().equals("default")) {
-            // This is ugly! But we put the default border style of the Jexer
-            // widgets here.
+            // This is ugly! But we put the default border style of the
+            // Casciian widgets here.
 
             // TWindow
             if (borderName.equals("casciian.TWindow.borderStyleForeground")) {

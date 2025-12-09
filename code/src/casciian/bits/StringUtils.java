@@ -507,7 +507,7 @@ public class StringUtils {
                 || (ch == 0x2b50)
                 || (ch == 0x2b55)
 
-                // Specific glyphs we use in Jexer
+                // Specific glyphs we use in Casciian
                 || (ch == 0x2b6e)
                 || (ch == 0x2b6f)
 

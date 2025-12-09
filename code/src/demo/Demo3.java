@@ -17,7 +17,7 @@ package demo;
 import java.io.*;
 
 /**
- * This class is the main driver for a simple demonstration of Jexer's
+ * This class is the main driver for a simple demonstration of Casciian's
  * capabilities.  This one passes separate Reader/Writer to TApplication,
  * which will behave quite badly due to System.in/out not being in raw mode.
  */

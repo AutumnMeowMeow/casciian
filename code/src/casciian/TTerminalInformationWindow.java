@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 
 import casciian.backend.ECMA48Terminal;
 import casciian.backend.MultiScreen;
-import casciian.backend.SwingTerminal;
 import casciian.bits.Clipboard;
 import casciian.event.TKeypressEvent;
 import static casciian.TKeypress.*;
@@ -69,13 +68,9 @@ public class TTerminalInformationWindow extends TWindow {
 
         final Clipboard clipboard = application.getClipboard();
 
-        SwingTerminal swingTerminal = null;
         ECMA48Terminal ecmaTerminal = null;
         MultiScreen multiScreen = null;
 
-        if (getScreen() instanceof SwingTerminal) {
-            swingTerminal = (SwingTerminal) getScreen();
-        }
         if (getScreen() instanceof ECMA48Terminal) {
             ecmaTerminal = (ECMA48Terminal) getScreen();
         }
@@ -88,9 +83,6 @@ public class TTerminalInformationWindow extends TWindow {
         int row = 1;
         TLabel label = addLabel(i18n.getString("backendType"), labelColumn, row);
         copyText += label.getLabel() + " ";
-        if (swingTerminal != null) {
-            label = addLabel("Swing", infoColumn, row, "ttext", false);
-        }
         if (ecmaTerminal != null) {
             label = addLabel("EMCA48/Xterm", infoColumn, row, "ttext", false);
         }

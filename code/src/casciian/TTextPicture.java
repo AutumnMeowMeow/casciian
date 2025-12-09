@@ -21,8 +21,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import casciian.backend.ECMA48Terminal;
-import casciian.backend.SwingTerminal;
 import casciian.bits.Cell;
 import casciian.event.TKeypressEvent;
 import casciian.event.TMouseEvent;

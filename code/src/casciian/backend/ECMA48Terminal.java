@@ -309,26 +309,33 @@ public class ECMA48Terminal extends LogicalScreen
     private Object listener;
 
     // RGB colors matching the DOS/CGA colors.
-    private int MYBLACK;
-    private int MYRED;
-    private int MYGREEN;
-    private int MYYELLOW;
-    private int MYBLUE;
-    private int MYMAGENTA;
-    private int MYCYAN;
-    private int MYWHITE;
-    private int MYBOLD_BLACK;
-    private int MYBOLD_RED;
-    private int MYBOLD_GREEN;
-    private int MYBOLD_YELLOW;
-    private int MYBOLD_BLUE;
-    private int MYBOLD_MAGENTA;
-    private int MYBOLD_CYAN;
-    private int MYBOLD_WHITE;
+    private static int MYBLACK;
+    private static int MYRED;
+    private static int MYGREEN;
+    private static int MYYELLOW;
+    private static int MYBLUE;
+    private static int MYMAGENTA;
+    private static int MYCYAN;
+    private static int MYWHITE;
+    private static int MYBOLD_BLACK;
+    private static int MYBOLD_RED;
+    private static int MYBOLD_GREEN;
+    private static int MYBOLD_YELLOW;
+    private static int MYBOLD_BLUE;
+    private static int MYBOLD_MAGENTA;
+    private static int MYBOLD_CYAN;
+    private static int MYBOLD_WHITE;
 
     // ------------------------------------------------------------------------
     // Constructors -----------------------------------------------------------
     // ------------------------------------------------------------------------
+
+    /**
+     * Static constructor.
+     */
+    static {
+        setDOSColors();
+    }
 
     /**
      * Constructor sets up state for getEvent().  If either windowWidth or
@@ -395,7 +402,6 @@ public class ECMA48Terminal extends LogicalScreen
         final InputStream input,
         final OutputStream output) throws UnsupportedEncodingException {
 
-        setDOSColors();
         this.backend     = backend;
 
         resetParser();
@@ -515,7 +521,6 @@ public class ECMA48Terminal extends LogicalScreen
             throw new IllegalArgumentException("Writer must be specified");
         }
 
-        setDOSColors();
         this.backend     = backend;
 
         resetParser();
@@ -1483,19 +1488,6 @@ public class ECMA48Terminal extends LogicalScreen
      */
     public boolean isFocused() {
         return hasFocus;
-    }
-
-    /**
-     * Set the mouse pointer (cursor) style.
-     *
-     * @param mouseStyle the pointer style string, one of: "default", "none",
-     * "hand", "text", "move", or "crosshair"
-     */
-    public void setMouseStyle(final String mouseStyle) {
-        // TODO: For now disregard this.  OSC 22 came out with XTerm 367
-        // which can select X11 cursors/pointers, but mintty implemented it
-        // against Win32 cursors/pointers.  And neither bothered to implement
-        // "really, just hide the damn pointer but still give me events" grr.
     }
 
     /**
@@ -2740,7 +2732,7 @@ public class ECMA48Terminal extends LogicalScreen
     /**
      * Setup system colors to match DOS color palette.
      */
-    private void setDOSColors() {
+    private static void setDOSColors() {
         MYBLACK         = 0x000000;
         MYRED           = 0xa80000;
         MYGREEN         = 0x00a800;
@@ -2814,7 +2806,7 @@ public class ECMA48Terminal extends LogicalScreen
      * @param attr the text attributes
      * @return the RGB color
      */
-    public int attrToForegroundColor(final CellAttributes attr) {
+    public static int attrToForegroundColor(final CellAttributes attr) {
         int rgb = attr.getForeColorRGB();
         if (rgb >= 0) {
             return rgb;
@@ -2867,7 +2859,7 @@ public class ECMA48Terminal extends LogicalScreen
      * @param attr the text attributes
      * @return the RGB color
      */
-    public int attrToBackgroundColor(final CellAttributes attr) {
+    public static int attrToBackgroundColor(final CellAttributes attr) {
         int rgb = attr.getBackColorRGB();
         if (rgb >= 0) {
             return rgb;

@@ -3,11 +3,11 @@ Casciian - Java Text User Interface library
 
 This library implements a text-based windowing system loosely
 reminiscent of Borland's [Turbo
-Vision](http://en.wikipedia.org/wiki/Turbo_Vision) system.
+Vision](http://en.wikipedia.org/wiki/Turbo_Vision) system for
+Xterm-like terminals.
 
-Casciian works on both Xterm-like terminals and Swing.  Casciian can
-be run inside its own terminal window, with support for all of its
-features including mouse, and of course more terminals.
+Casciian can be run inside its own terminal window, with support for
+all of its features including mouse, and of course more terminals.
 
 Casciian has seen inspiration from several other projects:
 
@@ -41,11 +41,7 @@ src/demo contains official demos showing all of the stock UI controls.
 The demos can be run as follows:
 
   * 'java -cp casciian.jar:demo.jar demo.Demo1' .  This will use
-    System.in/out with Xterm-like sequences on non-Windows non-Mac
-    platforms.  On Windows and Mac it will use a Swing JFrame.
-
-  * 'java -Dcasciian.Swing=true -cp casciian.jar:demo.jar demo.Demo1' .
-    This will always use Swing on any platform.
+    System.in/out with Xterm-like sequences.
 
   * 'java -cp casciian.jar:demo.jar demo.Demo2 PORT' (where PORT is a
     number to run the TCP daemon on).  This will use the Xterm backend
@@ -60,13 +56,6 @@ The demos can be run as follows:
   * 'java -cp casciian.jar:demo.jar demo.Demo4' .  This demonstrates
     hidden windows and a custom TDesktop.
 
-  * 'java -cp casciian.jar:demo.jar demo.Demo5' .  This demonstrates two
-    demo applications using different fonts in the same Swing frame.
-
-  * 'java -cp casciian.jar:demo.jar demo.Demo6' .  This demonstrates two
-    applications performing I/O across three screens: an Xterm screen
-    and Swing screen, monitored from a third Swing screen.
-
   * 'java -cp casciian.jar:demo.jar demo.Demo7' .  This demonstrates the
     BoxLayoutManager, achieving a similar result as the
     javax.swing.BoxLayout apidocs example.
@@ -74,13 +63,3 @@ The demos can be run as follows:
   * 'java -cp casciian.jar:demo.jar demo.Demo8 PORT' (where PORT is a
     number to run the TCP daemon on).  This will use the Xterm backend
     on a telnet server to share one screen to many terminals.
-
-
-
-Acknowledgements
-----------------
-
-Casciian makes use of the Terminus TrueType font [made available
-here](http://files.ax86.net/terminus-ttf/) .
-
-💖

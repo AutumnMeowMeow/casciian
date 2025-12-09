@@ -55,22 +55,7 @@ public class Demo7 {
     public static void main(final String [] args) throws Exception {
         // This demo will build everything "from the outside".
 
-        // Swing is the default backend on Windows unless explicitly
-        // overridden by casciian.Swing.
         TApplication.BackendType backendType = TApplication.BackendType.XTERM;
-        if (System.getProperty("os.name").startsWith("Windows")) {
-            backendType = TApplication.BackendType.SWING;
-        }
-        if (System.getProperty("os.name").startsWith("Mac")) {
-            backendType = TApplication.BackendType.SWING;
-        }
-        if (System.getProperty("casciian.Swing") != null) {
-            if (System.getProperty("casciian.Swing", "false").equals("true")) {
-                backendType = TApplication.BackendType.SWING;
-            } else {
-                backendType = TApplication.BackendType.XTERM;
-            }
-        }
         TApplication app = new TApplication(backendType);
         app.addToolMenu();
         app.addFileMenu();

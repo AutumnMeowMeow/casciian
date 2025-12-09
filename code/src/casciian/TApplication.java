@@ -37,8 +37,6 @@ import casciian.backend.Backend;
 import casciian.backend.ECMA48Backend;
 import casciian.backend.MultiBackend;
 import casciian.backend.Screen;
-import casciian.backend.SwingBackend;
-import casciian.backend.SwingTerminal;
 import casciian.backend.TWindowBackend;
 import casciian.bits.Cell;
 import casciian.bits.CellAttributes;
@@ -98,11 +96,6 @@ public class TApplication implements Runnable {
      * Two backend types are available.
      */
     public static enum BackendType {
-        /**
-         * A Swing JFrame.
-         */
-        SWING,
-
         /**
          * An ECMA48 / ANSI X3.64 / XTERM style terminal.
          */
@@ -715,8 +708,7 @@ public class TApplication implements Runnable {
     /**
      * Public constructor.
      *
-     * @param backendType BackendType.XTERM, BackendType.ECMA48 or
-     * BackendType.SWING
+     * @param backendType BackendType.XTERM or BackendType.ECMA48
      * @param windowWidth the number of text columns to start with
      * @param windowHeight the number of text rows to start with
      * @param fontSize the size in points
@@ -729,10 +721,6 @@ public class TApplication implements Runnable {
         throws UnsupportedEncodingException {
 
         switch (backendType) {
-        case SWING:
-            backend = new SwingBackend(this, windowWidth, windowHeight,
-                fontSize);
-            break;
         case XTERM:
             // Fall through...
         case ECMA48:
@@ -749,8 +737,7 @@ public class TApplication implements Runnable {
     /**
      * Public constructor.
      *
-     * @param backendType BackendType.XTERM, BackendType.ECMA48 or
-     * BackendType.SWING
+     * @param backendType BackendType.XTERM or BackendType.ECMA48
      * @throws UnsupportedEncodingException if an exception is thrown when
      * creating the InputStreamReader
      */
@@ -759,15 +746,6 @@ public class TApplication implements Runnable {
         throws UnsupportedEncodingException {
 
         switch (backendType) {
-        case SWING:
-            // The default SwingBackend is 80x25, 20 pt font.  If you want to
-            // change that, you can pass the extra arguments to the
-            // SwingBackend constructor here.  For example, if you wanted
-            // 90x30, 16 pt font:
-            //
-            // backend = new SwingBackend(this, 90, 30, 16);
-            backend = new SwingBackend(this);
-            break;
         case XTERM:
             // Fall through...
         case ECMA48:
@@ -837,7 +815,7 @@ public class TApplication implements Runnable {
     }
 
     /**
-     * Public constructor.  This hook enables use with new non-Jexer
+     * Public constructor.  This hook enables use with new non-Casciian
      * backends.
      *
      * @param backend a Backend that is already ready to go.
@@ -1278,10 +1256,6 @@ public class TApplication implements Runnable {
             openAnsiFile();
             return true;
         }
-        if (menu.getId() == TMenu.MID_SCREEN_OPTIONS) {
-            new TScreenOptionsWindow(this);
-            return true;
-        }
 
         if (menu.getId() ==TMenu.MID_TEXT_CURSOR_GLINT) {
             synchronized (screenEffects) {
@@ -1565,7 +1539,6 @@ public class TApplication implements Runnable {
             typingHidMouse = false;
 
             TMouseEvent mouse = (TMouseEvent) event;
-            setMouseState(mouse);
 
             if (mouse.isMouse1() && (mouse.isShift() || mouse.isCtrl())) {
                 // Screen selection.
@@ -1802,7 +1775,6 @@ public class TApplication implements Runnable {
             typingHidMouse = false;
 
             TMouseEvent mouse = (TMouseEvent) event;
-            setMouseState(mouse);
 
             if ((mouseX != mouse.getX()) || (mouseY != mouse.getY())) {
                 mouseX = mouse.getX();
@@ -2524,30 +2496,6 @@ public class TApplication implements Runnable {
         }
         return window.getWidgetUnderMouse(mouse);
     }
-
-    /**
-     * Set the mouse state to match the style or bitmap requested by the
-     * widget under the mouse.
-     *
-     * @param mouse the mouse position
-     */
-    private void setMouseState(final TMouseEvent mouse) {
-        /*
-         * Use pixel-level mouse events if the active widget or window has
-         * requested it.
-         */
-        String mouseStyle = System.getProperty("casciian.Swing.mouseStyle",
-            "default");
-
-        TWidget activeWidget = getWidgetUnderMouse(mouse);
-        if (activeWidget == null) {
-            // Reset to default.
-            backend.setMouseStyle(mouseStyle);
-            return;
-        }
-        backend.setMouseStyle(mouseStyle);
-    }
-
 
     // ------------------------------------------------------------------------
     // Screen refresh loop ----------------------------------------------------
@@ -4246,7 +4194,6 @@ public class TApplication implements Runnable {
         toolMenu.addDefaultItem(TMenu.MID_REPAINT);
         toolMenu.addSeparator();
         toolMenu.addDefaultItem(TMenu.MID_VIEW_ANSI);
-        toolMenu.addDefaultItem(TMenu.MID_SCREEN_OPTIONS);
         toolMenu.addSeparator();
         toolMenu.addDefaultItem(TMenu.MID_TEXT_CURSOR_GLINT);
         TStatusBar toolStatusBar = toolMenu.newStatusBar(i18n.

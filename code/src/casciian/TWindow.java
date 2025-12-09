@@ -188,10 +188,11 @@ public class TWindow extends TWidget {
 
     /**
      * A window may request that TApplication NOT draw the mouse cursor over
-     * it by setting this to true.  This is currently only used within Jexer
-     * by TTerminalWindow so that only the bottom-most instance of nested
-     * Jexer's draws the mouse within its application window.  But perhaps
-     * other applications can use it, so public getter/setter is provided.
+     * it by setting this to true.  This is currently only used within
+     * Casciian by TTerminalWindow so that only the bottom-most instance of
+     * nested Casciian's draws the mouse within its application window.  But
+     * perhaps other applications can use it, so public getter/setter is
+     * provided.
      */
     private boolean hideMouse = false;
 

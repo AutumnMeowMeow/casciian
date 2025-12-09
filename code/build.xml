@@ -53,12 +53,7 @@
          basedir="${classes.dir}"
          excludes="demo/**">
 
-      <fileset dir="${resources.dir}">
-        <exclude name="**/*TTF-4.49.1.ttf" />
-        <exclude name="**/*Italic*.ttf" />
-        <exclude name="demo/**" />
-        <exclude name="**/emoji/**" />
-      </fileset>
+      <fileset dir="${resources.dir}"/>
 
       <!-- Include properties files. -->
       <fileset dir="${src.dir}" includes="**/casciian/**/*.properties"/>
@@ -71,13 +66,6 @@
     <jar destfile="${jar.dir}/${demo-jar}.jar"
          basedir="${classes.dir}"
          excludes="casciian/** module-info.class">
-
-      <fileset dir="${resources.dir}">
-        <exclude name="**/terminus**/**" />
-        <exclude name="**/help.xml" />
-        <exclude name="**/logo_128.png" />
-        <exclude name="**/emoji/**" />
-      </fileset>
 
       <!-- Include properties files. -->
       <fileset dir="${src.dir}" includes="**/demo/*.properties"/>
@@ -94,10 +82,7 @@
     <jar destfile="${jar.dir}/${ant.project.name}-${version}-full.jar"
          basedir="${classes.dir}">
 
-      <fileset dir="${resources.dir}">
-        <exclude name="**/*TTF-4.49.1.ttf" />
-        <exclude name="**/*Italic*.ttf" />
-      </fileset>
+      <fileset dir="${resources.dir}"/>
 
       <!-- GraalVM AOT resources metadata -->
 
@@ -111,9 +96,9 @@
            In the meantime, OpenJ9 with -Xshareclasses:nonFatal,silent
            works great.
 
-      <metainf dir="${src.dir}" includes="native-image/**"/>
-
       -->
+
+      <metainf dir="${src.dir}" includes="native-image/**"/>
 
       <!-- Include properties files. -->
       <fileset dir="${src.dir}" includes="**/*.properties"/>

@@ -14,33 +14,8 @@ default values, below which is a more detailed outline.
 | casciian.hideMouseWhenTyping | false   | Hide mouse on keystroke everywhere  |
 | casciian.hideMenuBar         | false   | Hide the pull-down menu             |
 | casciian.hideStatusBar       | false   | Hide the status bar                 |
-| casciian.cursorBlink         | on      | Allow blinking cursor               |
 | casciian.textBlink           | on      | Allow blinking text                 |
 | casciian.translucence        | true    | Translucent windows                 |
-| casciian.Swing               |         | Demo: select backend                |
-| casciian.Swing.cursorBlink   | on      | Swing: Allow blinking cursor        |
-| casciian.Swing.textBlink     | on      | Swing: Allow blinking text          |
-| casciian.Swing.fontSize      | 20      | Demo: font size of Swing window     |
-| casciian.Swing.cursorStyle   | underline | Swing: cursor style               |
-| casciian.Swing.mouseStyle    | none    | Swing: mouse pointer selection      |
-| casciian.Swing.mouseImage    |         | Swing: image to use for mouse icon  |
-| casciian.Swing.tripleBuffer  | true    | Swing: use triple-buffering         |
-| casciian.Swing.color0        | #000000 | Swing: color for black              |
-| casciian.Swing.color1        | #a80000 | Swing: color for red                |
-| casciian.Swing.color2        | #00a800 | Swing: color for green              |
-| casciian.Swing.color3        | #a85400 | Swing: color for yellow             |
-| casciian.Swing.color4        | #0000a8 | Swing: color for blue               |
-| casciian.Swing.color5        | #a800a8 | Swing: color for magenta            |
-| casciian.Swing.color6        | #00a8a8 | Swing: color for cyan               |
-| casciian.Swing.color7        | #a8a8a8 | Swing: color for white              |
-| casciian.Swing.color8        | #545454 | Swing: color for black + bold       |
-| casciian.Swing.color9        | #fc5454 | Swing: color for red + bold         |
-| casciian.Swing.color10       | #54fc54 | Swing: color for green + bold       |
-| casciian.Swing.color11       | #fcfc54 | Swing: color for yellow + bold      |
-| casciian.Swing.color12       | #5454fc | Swing: color for blue + bold        |
-| casciian.Swing.color13       | #fc54fc | Swing: color for magenta + bold     |
-| casciian.Swing.color14       | #54fcfc | Swing: color for cyan + bold        |
-| casciian.Swing.color15       | #fcfcfc | Swing: color for white + bold       |
 | casciian.TEditor.hideMouseWhenTyping | true | Hide mouse on keystroke in text editor windows |
 | casciian.TEditor.margin      | 0       | Right column margin to highlight    |
 | casciian.TEditor.autoWrap    | false   | Automatically wrap text to margin   |
@@ -84,9 +59,6 @@ default values, below which is a more detailed outline.
 | casciian.TEditColorTheme.options.borderStyle   | single | Interior boxes border style |
 | casciian.TPanel.borderStyle  | none    | TPanel border style                 |
 | casciian.TRadioGroup.borderStyle       | singleVdoubleH | Radio group border style    |
-| casciian.TScreenOptions.borderStyle    | single | Screen options window border style  |
-| casciian.TScreenOptions.grid.borderStyle    | single | Border style around the grid   |
-| casciian.TScreenOptions.options.borderStyle | single | Interior boxes border style    |
 | casciian.TWindow.opacity     | 75      | Default window opacity (10 - 100)   |
 | casciian.TTerminal.opacity   | 85      | Terminal window opacity (10 - 100)  |
 | casciian.TMenu.opacity       | 85      | Menu window opacity (10 - 100)      |
@@ -105,27 +77,24 @@ Default: true.
 casciian.blinkMillis
 --------------------
 
-Used by casciian.backend.ECMA48Terminal and casciian.backend.SwingTerminal.
-The number of millis to wait before switching the blink from visible
-to invisible.  If 0 or negative, blinking is disabled.  Default: 500.
+Used by casciian.backend.ECMA48Terminal.  The number of millis to wait
+before switching the blink from visible to invisible.  If 0 or
+negative, blinking is disabled.  Default: 500.
 
 casciian.blinkDimPercent
 ------------------------
 
-Used by casciian.backend.ECMA48Terminal and casciian.backend.SwingTerminal.
-The percent of "dimming" to do when blinking text is invisible.  0
-means no blinking; 100 means the foreground color matches the
-background color (like CGA/EGA/VGA hardware).  Values less than 100
-requires 24-bit RGB ("truecolor") support from the terminal to look
-correct.  Default: 80.
+Used by casciian.backend.ECMA48Terminal.  The percent of "dimming" to
+do when blinking text is invisible.  0 means no blinking; 100 means
+the foreground color matches the background color (like CGA/EGA/VGA
+hardware).  Values less than 100 requires 24-bit RGB ("truecolor")
+support from the terminal to look correct.  Default: 80.
 
 casciian.textMouse
 ------------------
 
-Used by casciian.TApplication and casciian.backend.SwingTerminal.  If true,
-display a text-based mouse pointer, otherwise do not.  (Also, the
-Swing backend will display the "hand" mouse cursor when textMouse is
-false.)  Default: true.
+Used by casciian.TApplication.  If true, display a text-based mouse
+pointer, otherwise do not.  Default: true.
 
 casciian.hideMouseWhenTyping
 ----------------------------
@@ -148,18 +117,12 @@ Used by casciian.TApplication.  If true, do not display the status bar on
 the bottom row.  Status bar keyboard accelerators will still work.
 Default: false.
 
-casciian.cursorBlink
---------------------
-
-Used by casciian.backend.SwingTerminal.  If on, a blinking cursor style
-may blink.  If off, the cursor will never blink.  Default: on.
-
 casciian.textBlink
 ------------------
 
-Used by casciian.backend.ECMA48Terminal and casciian.backend.SwingTerminal.
-If on, blinking text may blink.  If off, blinking text will always be
-visible without actually blinking.  Default: on.
+Used by casciian.backend.ECMA48Terminal.  If on, blinking text may
+blink.  If off, blinking text will always be visible without actually
+blinking.  Default: on.
 
 casciian.translucence
 ---------------------
@@ -168,64 +131,6 @@ Used by casciian.TApplication.  If true, alpha-blend windows during
 drawing to achieve a glass-like translucence effect.  Note that this
 requires 24-bit RGB ("truecolor") support from the terminal.  Default:
 true.
-
-casciian.Swing
---------------
-
-Used by casciian.demos.Demo1 and casciian.demos.Demo4.  If true, use the
-Swing interface for the demo application.  Default: true on Windows
-(os.name starts with "Windows") and Mac (os.name starts with "Mac"),
-false on non-Windows and non-Mac platforms.
-
-casciian.Swing.cursorBlink
---------------------------
-
-Used by casciian.backend.SwingTerminal.  If on, a blinking cursor style
-will actually blink.  If off, the cursor will never blink.
-(Overridden by casciian.cursorBlink.)  Default: on.
-
-casciian.Swing.textBlink
-------------------------
-
-Used by casciian.backend.SwingTerminal.  If on, blinking text will
-actually blink.  If off, blinking text will always be visible without
-actually blinking.  (Overridden by casciian.textBlink.)  Default: on.
-
-casciian.Swing.fontSize
------------------------
-
-Used by casciian.demos.Demo1.  The font size to use with the Swing
-interface for the demo application.  Default: 20.
-
-casciian.Swing.cursorStyle
---------------------------
-
-Used by casciian.backend.SwingTerminal.  Selects the cursor style to
-draw.  Valid values are: underline, block, outline, and verticalBar.
-Default: underline.
-
-casciian.Swing.mouseStyle
--------------------------
-
-Used by casciian.backend.SwingTerminal.  Selects the mouse pointer
-(java.awt.Cursor) style to use.  Valid values are: none, default,
-hand, crosshair, move, and text.  Default: none.
-
-casciian.Swing.mouseImage
--------------------------
-
-Used by casciian.backend.SwingTerminal.  Filename containing an image to
-use as the mouse pointer.  Filename must be on the classpath.  The hot
-spot will be in the middle of the image.
-
-casciian.Swing.tripleBuffer
----------------------------
-
-Used by casciian.backend.SwingTerminal.  If true, use triple-buffering
-which reduces screen tearing but may also be slower to draw on slower
-systems.  If false, use naive Swing thread drawing, which may be
-faster on slower systems but also more likely to have screen tearing.
-Default: true.
 
 casciian.TEditor.hideMouseWhenTyping
 ------------------------------------
@@ -471,30 +376,6 @@ Used by casciian.TRadioGroup.  The glyphs to be used for the box border
 and corners around the radio button options.  See
 casciian.TWindow.borderStyleForeground for the available values.
 Default: singleVdoubleH.
-
-casciian.TScreenOptions.borderStyle
------------------------------------
-
-Used by casciian.TScreenOptionsWindow.  The glyphs to be used for the
-screen options window border and corners.  See
-casciian.TWindow.borderStyleForeground for the available values.
-Default: single.
-
-casciian.TScreenOptions.grid.borderStyle
-----------------------------------------
-
-Used by casciian.TScreenOptionsWindow.  The glyphs to be used for the
-sample window grid border and corners.  See
-casciian.TWindow.borderStyleForeground for the available values.
-Default: single.
-
-casciian.TScreenOptions.options.borderStyle
--------------------------------------------
-
-Used by casciian.TScreenOptionsWindow.  The glyphs to be used for border
-and corners drawn on the interior boxes.  See
-casciian.TWindow.borderStyleForeground for the available values.
-Default: single.
 
 casciian.translucence
 ---------------------

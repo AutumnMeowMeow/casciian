@@ -14,10 +14,6 @@
  */
 package casciian.backend;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import casciian.TWidget;
 import casciian.bits.BorderStyle;
 import casciian.bits.Cell;
@@ -33,6 +29,111 @@ import casciian.bits.StringUtils;
  * A logical screen composed of a 2D array of Cells.
  */
 public class LogicalScreen implements Screen {
+
+    // ------------------------------------------------------------------------
+    // Constants --------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /**
+     * A simple 2D RGB array.
+     */
+    private class BufferedImage {
+
+        /**
+         * The 24-bit RGB data.
+         */
+        private int [][] rgb;
+
+        /**
+         * The width of this image.
+         */
+        private int width;
+
+        /**
+         * The height of this image.
+         */
+        private int height;
+
+        /**
+         * Public constructor.
+         *
+         * @param width the number of pixels in width
+         * @param height the number of pixels in height
+         */
+        public BufferedImage(final int width, final int height) {
+            this.width = width;
+            this.height = height;
+            rgb = new int[width][height];
+        }
+
+        /**
+         * Public constructor.
+         *
+         * @param image another BufferedImage that the RGB data will be
+         * copied from
+         */
+        public BufferedImage(final BufferedImage image) {
+            width = image.width;
+            height = image.height;
+            rgb = new int[width][height];
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    this.rgb[x][y] = image.rgb[x][y];
+                }
+            }
+        }
+
+        /**
+         * Get an RGB value.
+         *
+         * @param x the column location
+         * @param y the row location
+         * @return the RGB value
+         */
+        public int getRGB(final int x, final int y) {
+            return rgb[x][y];
+        }
+
+        /**
+         * Set an RGB value.
+         *
+         * @param x the column location
+         * @param y the row location
+         * @param rgb the new RGB value
+         */
+        public void setRGB(final int x, final int y, final int rgb) {
+            this.rgb[x][y] = rgb;
+        }
+
+        /**
+         * Alpha-blend another image over this one.
+         *
+         * @param image the other image
+         * @param alpha a number between 0 and 1
+         */
+        public void alphaBlendOver(final BufferedImage image,
+            final double alpha) {
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int underRGB = rgb[x][y];
+                    int overRGB = image.rgb[x][y];
+                    int underRed   = (underRGB >>> 16) & 0xFF;
+                    int underGreen = (underRGB >>>  8) & 0xFF;
+                    int underBlue  =  underRGB         & 0xFF;
+                    int overRed    = (overRGB >>> 16) & 0xFF;
+                    int overGreen  = (overRGB >>>  8) & 0xFF;
+                    int overBlue   =  overRGB         & 0xFF;
+                    int red   = (int) ((  underRed * (1.0 - alpha)) + (  overRed * alpha));
+                    int green = (int) ((underGreen * (1.0 - alpha)) + (overGreen * alpha));
+                    int blue  = (int) (( underBlue * (1.0 - alpha)) + ( overBlue * alpha));
+                    int newRgb = (red << 16) | (green << 8) | blue;
+                    this.rgb[x][y] = newRgb;
+                }
+            }
+        }
+
+    }
 
     // ------------------------------------------------------------------------
     // Variables --------------------------------------------------------------
@@ -1673,16 +1774,11 @@ public class LogicalScreen implements Screen {
          */
         synchronized (this) {
 
-            BufferedImage thisForeground = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_ARGB);
-            BufferedImage thisBackground = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_ARGB);
-            BufferedImage overForeground = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_ARGB);
-            BufferedImage overBackground = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_ARGB);
-            BufferedImage thisOldBackground = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_ARGB);
+            BufferedImage thisForeground = new BufferedImage(width, height);
+            BufferedImage thisBackground = new BufferedImage(width, height);
+            BufferedImage overForeground = new BufferedImage(width, height);
+            BufferedImage overBackground = new BufferedImage(width, height);
+            BufferedImage thisOldBackground = new BufferedImage(width, height);
 
             final int OPAQUE = 0xFF000000;
 
@@ -1701,7 +1797,7 @@ public class LogicalScreen implements Screen {
                         if (backend != null) {
                             thisBg = backend.attrToBackgroundColor(cell);
                         } else {
-                            thisBg = SwingTerminal.attrToBackgroundColor(cell);
+                            thisBg = ECMA48Terminal.attrToBackgroundColor(cell);
                         }
                     }
                     int thisFg = cell.getForeColorRGB();
@@ -1709,7 +1805,7 @@ public class LogicalScreen implements Screen {
                         if (backend != null) {
                             thisFg = backend.attrToForegroundColor(cell);
                         } else {
-                            thisFg = SwingTerminal.attrToForegroundColor(cell);
+                            thisFg = ECMA48Terminal.attrToForegroundColor(cell);
                         }
                     }
 
@@ -1721,7 +1817,7 @@ public class LogicalScreen implements Screen {
                         if (backend != null) {
                             overFg = backend.attrToForegroundColor(over);
                         } else {
-                            overFg = SwingTerminal.attrToForegroundColor(over);
+                            overFg = ECMA48Terminal.attrToForegroundColor(over);
                         }
                     }
                     int overBg = over.getBackColorRGB();
@@ -1729,7 +1825,7 @@ public class LogicalScreen implements Screen {
                         if (backend != null) {
                             overBg = backend.attrToBackgroundColor(over);
                         } else {
-                            overBg = SwingTerminal.attrToBackgroundColor(over);
+                            overBg = ECMA48Terminal.attrToBackgroundColor(over);
                         }
                     }
                     thisFg |= OPAQUE;
@@ -1753,26 +1849,10 @@ public class LogicalScreen implements Screen {
             // Also blit overForeground over thisBackground to handle the new
             // layer's glyph opacity.
             float fAlpha = (float) (alpha / 255.0);
-            Graphics2D g2d = thisForeground.createGraphics();
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    fAlpha));
-            g2d.drawImage(overBackground, 0, 0, null);
-            g2d.dispose();
-
-            g2d = thisBackground.createGraphics();
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    fAlpha));
-            g2d.drawImage(overBackground, 0, 0, null);
-            g2d.dispose();
-
-            BufferedImage glyphForeground = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_ARGB);
-            g2d = glyphForeground.createGraphics();
-            g2d.drawImage(thisBackground, 0, 0, null);
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-                    fAlpha));
-            g2d.drawImage(overForeground, 0, 0, null);
-            g2d.dispose();
+            thisForeground.alphaBlendOver(overBackground, fAlpha);
+            thisBackground.alphaBlendOver(overBackground, fAlpha);
+            BufferedImage glyphForeground = new BufferedImage(thisBackground);
+            glyphForeground.alphaBlendOver(overForeground, fAlpha);
 
             for (int row = y; (row < y + height) && (row < this.height); row++) {
                 if (row < 0) {

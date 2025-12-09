@@ -14,7 +14,6 @@
  */
 package casciian.layout;
 
-import java.awt.Rectangle;
 import java.util.HashMap;
 
 import casciian.TButton;
@@ -103,6 +102,23 @@ public class AnchoredLayoutManager implements LayoutManager {
             this.padY = padY;
         }
 
+    }
+
+    /**
+     * A simple rectangle class.
+     */
+    private class Rectangle {
+        double x;
+        double y;
+        double width;
+        double height;
+
+        Rectangle(final int x, final int y, final int width, final int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -247,14 +263,14 @@ public class AnchoredLayoutManager implements LayoutManager {
             Rectangle rect = children.get(child);
             AnchorData anchorData = anchors.get(child);
 
-            int oldX = (int) (rect.getX() * widthRatio);
-            int oldY = (int) (rect.getY() * heightRatio);
-            int oldWidth = (int) (rect.getWidth() * widthRatio);
-            int oldHeight = (int) (rect.getHeight() * heightRatio);
+            int oldX = (int) (rect.x * widthRatio);
+            int oldY = (int) (rect.y * heightRatio);
+            int oldWidth = (int) (rect.width * widthRatio);
+            int oldHeight = (int) (rect.height * heightRatio);
             if (child instanceof TButton) {
                 // Buttons have fixed width
-                oldWidth = (int) rect.getWidth();
-                oldHeight = (int) rect.getHeight();
+                oldWidth = (int) rect.width;
+                oldHeight = (int) rect.height;
             }
 
             int newX = oldX;
@@ -327,26 +343,26 @@ public class AnchoredLayoutManager implements LayoutManager {
 
         anchorData.anchor = anchor;
         anchorData.widget = relativeWidget;
-        anchorData.padX = (int) rect.getX();
-        anchorData.padY = (int) rect.getY();
+        anchorData.padX = (int) rect.x;
+        anchorData.padY = (int) rect.y;
 
         if (anchorData.widget == null) {
             switch (anchorData.anchor) {
             case TOP_LEFT:
-                anchorData.padX = (int) rect.getX();
-                anchorData.padY = (int) rect.getY();
+                anchorData.padX = (int) rect.x;
+                anchorData.padY = (int) rect.y;
                 break;
             case TOP_RIGHT:
-                anchorData.padX = width - (int) (rect.getX() + rect.getWidth());
-                anchorData.padY = (int) rect.getY();
+                anchorData.padX = width - (int) (rect.x + rect.width);
+                anchorData.padY = (int) rect.y;
                 break;
             case BOTTOM_LEFT:
-                anchorData.padX = (int) rect.getX();
-                anchorData.padY = height - (int) (rect.getY() + rect.getHeight());
+                anchorData.padX = (int) rect.x;
+                anchorData.padY = height - (int) (rect.y + rect.height);
                 break;
             case BOTTOM_RIGHT:
-                anchorData.padX = width - (int) (rect.getX() + rect.getWidth());
-                anchorData.padY = height - (int) (rect.getY() + rect.getHeight());
+                anchorData.padX = width - (int) (rect.x + rect.width);
+                anchorData.padY = height - (int) (rect.y + rect.height);
                 break;
             default:
                 throw new IllegalArgumentException("Only TOP_LEFT, TOP_RIGHT, "
@@ -357,20 +373,20 @@ public class AnchoredLayoutManager implements LayoutManager {
         } else {
             switch (anchorData.anchor) {
             case TOP:
-                anchorData.padX = (int) rect.getX() - relativeWidget.getX();
-                anchorData.padY = (int) rect.getY() - (relativeWidget.getY() + relativeWidget.getHeight());
+                anchorData.padX = (int) rect.x - relativeWidget.getX();
+                anchorData.padY = (int) rect.y - (relativeWidget.getY() + relativeWidget.getHeight());
                 break;
             case LEFT:
-                anchorData.padX = (int) rect.getX() - (relativeWidget.getX() + relativeWidget.getWidth());
-                anchorData.padY = (int) rect.getY() - relativeWidget.getY();
+                anchorData.padX = (int) rect.x - (relativeWidget.getX() + relativeWidget.getWidth());
+                anchorData.padY = (int) rect.y - relativeWidget.getY();
                 break;
             case BOTTOM:
-                anchorData.padX = (int) rect.getX() - relativeWidget.getX();
-                anchorData.padY = relativeWidget.getY() - (int) (rect.getY() + rect.getHeight());
+                anchorData.padX = (int) rect.x - relativeWidget.getX();
+                anchorData.padY = relativeWidget.getY() - (int) (rect.y + rect.height);
                 break;
             case RIGHT:
-                anchorData.padX = relativeWidget.getX() - (int) (rect.getX() + rect.getWidth());
-                anchorData.padY = (int) rect.getY() - relativeWidget.getY();
+                anchorData.padX = relativeWidget.getX() - (int) (rect.x + rect.width);
+                anchorData.padY = (int) rect.y - relativeWidget.getY();
                 break;
             default:
                 throw new IllegalArgumentException("Only TOP, LEFT, BOTTOM, "

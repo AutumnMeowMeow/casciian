@@ -38,7 +38,6 @@ import casciian.menu.TMenu;
 import casciian.menu.TMenuItem;
 import casciian.menu.TSubMenu;
 import casciian.backend.Backend;
-import casciian.backend.SwingTerminal;
 
 /**
  * The demo application itself.
@@ -136,10 +135,7 @@ public class DemoApplication extends TApplication {
      */
     @SuppressWarnings("this-escape")
     public DemoApplication(final BackendType backendType) throws Exception {
-        // For the Swing demo, use an initial size of 82x28 so that a
-        // terminal window precisely fits the window.
-        super(backendType, (backendType == BackendType.SWING ? 82 : -1),
-            (backendType == BackendType.SWING ? 28 : -1), 20);
+        super(backendType);
         addAllWidgets();
         getBackend().setTitle(i18n.getString("applicationTitle"));
 
@@ -189,21 +185,6 @@ public class DemoApplication extends TApplication {
      */
     @Override
     public boolean onMenu(final TMenuEvent menu) {
-
-        if (menu.getId() == 3000) {
-            // Bigger +2
-            assert (getScreen() instanceof SwingTerminal);
-            SwingTerminal terminal = (SwingTerminal) getScreen();
-            terminal.setFontSize(terminal.getFontSize() + 2);
-            return true;
-        }
-        if (menu.getId() == 3001) {
-            // Smaller -2
-            assert (getScreen() instanceof SwingTerminal);
-            SwingTerminal terminal = (SwingTerminal) getScreen();
-            terminal.setFontSize(terminal.getFontSize() - 2);
-            return true;
-        }
 
         if (menu.getId() == 2050) {
             new TEditColorThemeWindow(this);
@@ -479,14 +460,6 @@ public class DemoApplication extends TApplication {
         item = subMenu.addItem(2001, i18n.getString("disabledSub"));
         item.setEnabled(false);
         item = subMenu.addItem(2002, i18n.getString("normalSub"));
-
-        if (getScreen() instanceof SwingTerminal) {
-            TMenu swingMenu = addMenu(i18n.getString("swing"));
-            item = swingMenu.addItem(3000, i18n.getString("bigger"));
-            item.setIcon(0x1f5da);
-            item = swingMenu.addItem(3001, i18n.getString("smaller"));
-            item.setIcon(0x1f5db);
-        }
 
         addTableMenu();
         addWindowMenu();

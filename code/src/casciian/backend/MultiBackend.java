@@ -318,26 +318,14 @@ public class MultiBackend implements Backend {
     }
 
     /**
-     * Set the mouse pointer (cursor) style.
-     *
-     * @param mouseStyle the pointer style string, one of: "default", "none",
-     * "hand", "text", "move", or "crosshair"
-     */
-    public void setMouseStyle(final String mouseStyle) {
-        for (Backend backend: backends) {
-            backend.setMouseStyle(mouseStyle);
-        }
-    }
-
-    /**
      * Convert a CellAttributes foreground color to an RGB color.
      *
      * @param attr the text attributes
      * @return the RGB color
      */
     public int attrToForegroundColor(final CellAttributes attr) {
-        // Use Swing colors.
-        return SwingTerminal.attrToForegroundColor(attr);
+        // Use ECMA48 colors.
+        return ECMA48Terminal.attrToForegroundColor(attr);
     }
 
     /**
@@ -347,8 +335,8 @@ public class MultiBackend implements Backend {
      * @return the RGB color
      */
     public int attrToBackgroundColor(final CellAttributes attr) {
-        // Use Swing colors.
-        return SwingTerminal.attrToBackgroundColor(attr);
+        // Use ECMA48 colors.
+        return ECMA48Terminal.attrToBackgroundColor(attr);
     }
 
     /**

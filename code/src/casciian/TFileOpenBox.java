@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import casciian.backend.SwingTerminal;
 import casciian.bits.GraphicsChars;
 import casciian.bits.StringUtils;
 import casciian.event.TKeypressEvent;
@@ -163,11 +162,7 @@ public class TFileOpenBox extends TWindow {
                     try {
                         checkFilename(entryField.getText());
                     } catch (IOException e) {
-                        // If the backend is Swing, we can emit the stack
-                        // trace to stderr.  Otherwise, just squash it.
-                        if (getScreen() instanceof SwingTerminal) {
-                            e.printStackTrace();
-                        }
+                        // SQUASH
                     }
                 }
             }, null);
@@ -187,11 +182,7 @@ public class TFileOpenBox extends TWindow {
                         }
                         activate(treeView);
                     } catch (IOException e) {
-                        // If the backend is Swing, we can emit the stack
-                        // trace to stderr.  Otherwise, just squash it.
-                        if (getScreen() instanceof SwingTerminal) {
-                            e.printStackTrace();
-                        }
+                        // SQUASH
                     }
                 }
             }
@@ -210,11 +201,7 @@ public class TFileOpenBox extends TWindow {
                         activate(entryField);
                         checkFilename(entryField.getText());
                     } catch (IOException e) {
-                        // If the backend is Swing, we can emit the stack
-                        // trace to stderr.  Otherwise, just squash it.
-                        if (getScreen() instanceof SwingTerminal) {
-                            e.printStackTrace();
-                        }
+                        // SQUASH
                     }
                 }
             },
@@ -228,11 +215,7 @@ public class TFileOpenBox extends TWindow {
                         activate(entryField);
                         getStatusBar().setText(entryField.getText());
                     } catch (IOException e) {
-                        // If the backend is Swing, we can emit the stack
-                        // trace to stderr.  Otherwise, just squash it.
-                        if (getScreen() instanceof SwingTerminal) {
-                            e.printStackTrace();
-                        }
+                        // SQUASH
                     }
                 }
             },
@@ -268,11 +251,7 @@ public class TFileOpenBox extends TWindow {
                     try {
                         checkFilename(entryField.getText());
                     } catch (IOException e) {
-                        // If the backend is Swing, we can emit the stack
-                        // trace to stderr.  Otherwise, just squash it.
-                        if (getScreen() instanceof SwingTerminal) {
-                            e.printStackTrace();
-                        }
+                        // SQUASH
                     }
                 }
             }
@@ -385,11 +364,7 @@ public class TFileOpenBox extends TWindow {
                     }
                     activate(treeView);
                 } catch (IOException e) {
-                    // If the backend is Swing, we can emit the stack trace
-                    // to stderr.  Otherwise, just squash it.
-                    if (getScreen() instanceof SwingTerminal) {
-                        e.printStackTrace();
-                    }
+                    // SQUASH
                 }
                 getStatusBar().setText("");
                 return;

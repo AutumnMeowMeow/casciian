@@ -826,11 +826,11 @@ public abstract class TWidget implements Comparable<TWidget> {
     /**
      * Set this widget's window to a specific window.
      *
-     * Having a null parent with a specified window is only used within Jexer
-     * by TStatusBar because TApplication routes events directly to it and
-     * calls its draw() method.  Any other non-parented widgets will require
-     * similar special case functionality to receive events or be drawn to
-     * screen.
+     * Having a null parent with a specified window is only used within
+     * Casciian by TStatusBar because TApplication routes events directly to
+     * it and calls its draw() method.  Any other non-parented widgets will
+     * require similar special case functionality to receive events or be
+     * drawn to screen.
      *
      * @param window the window to use
      */

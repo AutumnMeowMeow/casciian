@@ -19,13 +19,13 @@
  * <p>
  * This library is a text-based windowing system loosely reminiscent of
  * Borland's <a href="http://en.wikipedia.org/wiki/Turbo_Vision">Turbo
- * Vision</a> library.  Jexer's goal is to enable people to get up and
+ * Vision</a> library.  Casciian's goal is to enable people to get up and
  * running with minimum hassle and lots of polish.
  * </p>
  */
 module casciian {
     requires java.base;
-    requires transitive java.desktop;
+    requires transitive java.xml;
 
     exports casciian;
     exports casciian.backend;
