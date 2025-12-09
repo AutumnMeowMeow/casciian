@@ -178,23 +178,23 @@ public class HeadlessBackend extends LogicalScreen implements Backend {
     }
 
     /**
-     * Convert a CellAttributes foreground color to an AWT Color.
+     * Convert a CellAttributes foreground color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public java.awt.Color attrToForegroundColor(final CellAttributes attr) {
+    public int attrToForegroundColor(final CellAttributes attr) {
         // Use Swing colors.
         return SwingTerminal.attrToForegroundColor(attr);
     }
 
     /**
-     * Convert a CellAttributes background color to an AWT Color.
+     * Convert a CellAttributes background color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public java.awt.Color attrToBackgroundColor(final CellAttributes attr) {
+    public int attrToBackgroundColor(final CellAttributes attr) {
         // Use Swing colors.
         return SwingTerminal.attrToBackgroundColor(attr);
     }

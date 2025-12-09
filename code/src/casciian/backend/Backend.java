@@ -111,20 +111,20 @@ public interface Backend {
     public void setMouseStyle(final String mouseStyle);
 
     /**
-     * Convert a CellAttributes foreground color to an AWT Color.
+     * Convert a CellAttributes foreground color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public java.awt.Color attrToForegroundColor(final CellAttributes attr);
+    public int attrToForegroundColor(final CellAttributes attr);
 
     /**
-     * Convert a CellAttributes background color to an AWT Color.
+     * Convert a CellAttributes background color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public java.awt.Color attrToBackgroundColor(final CellAttributes attr);
+    public int attrToBackgroundColor(final CellAttributes attr);
 
     /**
      * Copy text to the system clipboard of the terminal on the backend.  Not

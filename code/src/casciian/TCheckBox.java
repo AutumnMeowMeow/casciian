@@ -182,8 +182,7 @@ public class TCheckBox extends TWidget {
         ) {
             checkboxColor.setPulse(true, false, 0);
             checkboxColor.setPulseColorRGB(getScreen().getBackend().
-                attrToForegroundColor(getTheme().getColor(
-                    "tcheckbox.pulse")).getRGB());
+                attrToForegroundColor(getTheme().getColor("tcheckbox.pulse")));
 
         }
 

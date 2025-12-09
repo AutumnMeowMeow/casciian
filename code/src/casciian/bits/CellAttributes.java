@@ -318,7 +318,7 @@ public class CellAttributes {
             if (foreColorRGB != -1) {
                 return foreColorRGB;
             }
-            return backend.attrToForegroundColor(this).getRGB() & 0xFFFFFF;
+            return backend.attrToForegroundColor(this) & 0xFFFFFF;
         }
 
         int offsetSlice = (flags & ANIMATION_TIME_MASK) >>> 16;
@@ -339,7 +339,7 @@ public class CellAttributes {
             sliceI = sliceN - sliceI;
         }
         int pulseColorRGB = getPulseColorRGB();
-        int foreColorRGB = backend.attrToForegroundColor(this).getRGB();
+        int foreColorRGB = backend.attrToForegroundColor(this);
         double fraction = (double) sliceI * 2.0 / (sliceN - 1);
         int finalColor = ImageUtils.rgbMove(foreColorRGB, pulseColorRGB,
             fraction);
@@ -628,11 +628,11 @@ public class CellAttributes {
 
         int backRGB = backColorRGB;
         if (backRGB < 0) {
-            backRGB = backend.attrToBackgroundColor(this).getRGB() & 0xFFFFFF;
+            backRGB = backend.attrToBackgroundColor(this) & 0xFFFFFF;
         }
 
         if (foreColorRGB < 0) {
-            foreColorRGB = backend.attrToForegroundColor(this).getRGB() & 0xFFFFFF;
+            foreColorRGB = backend.attrToForegroundColor(this) & 0xFFFFFF;
         }
 
         foreColorRGB = ImageUtils.rgbMove(foreColorRGB, backRGB,

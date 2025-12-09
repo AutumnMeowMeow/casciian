@@ -191,7 +191,7 @@ public class TRadioButton extends TWidget {
             radioButtonColor.setPulse(true, false, 0);
             radioButtonColor.setPulseColorRGB(getScreen().getBackend().
                 attrToForegroundColor(getTheme().getColor(
-                    "tradiobutton.pulse")).getRGB());
+                    "tradiobutton.pulse")));
         }
 
         if (matchWindowBackground) {

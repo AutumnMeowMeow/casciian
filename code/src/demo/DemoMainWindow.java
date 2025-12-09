@@ -14,7 +14,6 @@
  */
 package demo;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -385,14 +384,17 @@ public class DemoMainWindow extends TWindow {
      */
     public void setUseGradient(final boolean useGradient) {
         if (useGradient) {
-            Color PINK = new Color(0xf7, 0xa8, 0xb8);
-            Color BLUE = new Color(0x55, 0xcd, 0xfc);
+            int PINK = 0xf7a8b8;
+            int BLUE = 0x55cdfc;
+            int YELLOW = 0xffff00;
+            int ORANGE = 0xffc800;
+
             setDrawPreTransform(new GradientCellTransform(
                 GradientCellTransform.Layer.BACKGROUND, BLUE, PINK,
-                Color.YELLOW, BLUE), true);
+                YELLOW, BLUE), true);
 
             setDrawPostTransform(new MouseGlowCellTransform(
-                MouseGlowCellTransform.Layer.BOTH, Color.ORANGE, 7));
+                MouseGlowCellTransform.Layer.BOTH, ORANGE, 7));
         } else {
             setDrawPreTransform(null);
             setDrawPostTransform(null);

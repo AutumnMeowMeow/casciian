@@ -1292,56 +1292,52 @@ public class SwingTerminal extends LogicalScreen
     }
 
     /**
-     * Convert a CellAttributes foreground color to an AWT Color.
+     * Convert a CellAttributes foreground color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public static Color attrToForegroundColor(final CellAttributes attr) {
+    public static int attrToForegroundColor(final CellAttributes attr) {
         int rgb = attr.getForeColorRGB();
         if (rgb >= 0) {
-            int red     = (rgb >>> 16) & 0xFF;
-            int green   = (rgb >>>  8) & 0xFF;
-            int blue    =  rgb         & 0xFF;
-
-            return new Color(red, green, blue);
+            return rgb;
         }
 
         if (attr.isBold()) {
             if (attr.getForeColor().equals(casciian.bits.Color.BLACK)) {
-                return MYBOLD_BLACK;
+                return MYBOLD_BLACK.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.RED)) {
-                return MYBOLD_RED;
+                return MYBOLD_RED.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.BLUE)) {
-                return MYBOLD_BLUE;
+                return MYBOLD_BLUE.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.GREEN)) {
-                return MYBOLD_GREEN;
+                return MYBOLD_GREEN.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.YELLOW)) {
-                return MYBOLD_YELLOW;
+                return MYBOLD_YELLOW.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.CYAN)) {
-                return MYBOLD_CYAN;
+                return MYBOLD_CYAN.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.MAGENTA)) {
-                return MYBOLD_MAGENTA;
+                return MYBOLD_MAGENTA.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.WHITE)) {
-                return MYBOLD_WHITE;
+                return MYBOLD_WHITE.getRGB();
             }
         } else {
             if (attr.getForeColor().equals(casciian.bits.Color.BLACK)) {
-                return MYBLACK;
+                return MYBLACK.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.RED)) {
-                return MYRED;
+                return MYRED.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.BLUE)) {
-                return MYBLUE;
+                return MYBLUE.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.GREEN)) {
-                return MYGREEN;
+                return MYGREEN.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.YELLOW)) {
-                return MYYELLOW;
+                return MYYELLOW.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.CYAN)) {
-                return MYCYAN;
+                return MYCYAN.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.MAGENTA)) {
-                return MYMAGENTA;
+                return MYMAGENTA.getRGB();
             } else if (attr.getForeColor().equals(casciian.bits.Color.WHITE)) {
-                return MYWHITE;
+                return MYWHITE.getRGB();
             }
         }
         throw new IllegalArgumentException("Invalid color: " +
@@ -1349,37 +1345,33 @@ public class SwingTerminal extends LogicalScreen
     }
 
     /**
-     * Convert a CellAttributes background color to an AWT Color.
+     * Convert a CellAttributes background color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public static Color attrToBackgroundColor(final CellAttributes attr) {
+    public static int attrToBackgroundColor(final CellAttributes attr) {
         int rgb = attr.getBackColorRGB();
         if (rgb >= 0) {
-            int red     = (rgb >>> 16) & 0xFF;
-            int green   = (rgb >>>  8) & 0xFF;
-            int blue    =  rgb         & 0xFF;
-
-            return new Color(red, green, blue);
+            return rgb;
         }
 
         if (attr.getBackColor().equals(casciian.bits.Color.BLACK)) {
-            return MYBLACK;
+            return MYBLACK.getRGB();
         } else if (attr.getBackColor().equals(casciian.bits.Color.RED)) {
-            return MYRED;
+            return MYRED.getRGB();
         } else if (attr.getBackColor().equals(casciian.bits.Color.BLUE)) {
-            return MYBLUE;
+            return MYBLUE.getRGB();
         } else if (attr.getBackColor().equals(casciian.bits.Color.GREEN)) {
-            return MYGREEN;
+            return MYGREEN.getRGB();
         } else if (attr.getBackColor().equals(casciian.bits.Color.YELLOW)) {
-            return MYYELLOW;
+            return MYYELLOW.getRGB();
         } else if (attr.getBackColor().equals(casciian.bits.Color.CYAN)) {
-            return MYCYAN;
+            return MYCYAN.getRGB();
         } else if (attr.getBackColor().equals(casciian.bits.Color.MAGENTA)) {
-            return MYMAGENTA;
+            return MYMAGENTA.getRGB();
         } else if (attr.getBackColor().equals(casciian.bits.Color.WHITE)) {
-            return MYWHITE;
+            return MYWHITE.getRGB();
         }
         throw new IllegalArgumentException("Invalid color: " +
             attr.getBackColor().getValue());
@@ -1593,8 +1585,8 @@ public class SwingTerminal extends LogicalScreen
             if (ImageUtils.canDrawUnicodeBlockDrawingChar(ch)) {
                 CellAttributes cellColor = getDisplayCellColor(cell);
                 image = tempBuffer;
-                Color foreColor = attrToForegroundColor(cellColor);
-                Color backColor = attrToBackgroundColor(cellColor);
+                int foreColor = attrToForegroundColor(cellColor);
+                int backColor = attrToBackgroundColor(cellColor);
                 ImageUtils.drawUnicodeBlockDrawingChar(ch, foreColor,
                     backColor, image);
             }
@@ -1634,7 +1626,7 @@ public class SwingTerminal extends LogicalScreen
         CellAttributes cellColor = getDisplayCellColor(cell);
 
         // Draw the background rectangle, then the foreground character.
-        gr2.setColor(attrToBackgroundColor(cellColor));
+        gr2.setColor(new Color(attrToBackgroundColor(cellColor)));
         gr2.fillRect(gr2x, gr2y, textWidth, textHeight);
 
         // Handle blink and underline
@@ -1653,7 +1645,7 @@ public class SwingTerminal extends LogicalScreen
 
         if (showGlyph) {
             if (!cell.isCodePoint(' ')) {
-                gr2.setColor(attrToForegroundColor(cellColor));
+                gr2.setColor(new Color(attrToForegroundColor(cellColor)));
                 char [] chars = cell.toCharArray();
                 gr2.drawChars(chars, 0, chars.length, gr2x + textAdjustX,
                     gr2y + textHeight - maxDescent + textAdjustY);
@@ -1753,8 +1745,8 @@ public class SwingTerminal extends LogicalScreen
              * glyph that has "bled through" a background window. If that's
              * the case, use a grey cursor instead.
              */
-            int foreRGB = attrToForegroundColor(cell).getRGB();
-            int backRGB = attrToBackgroundColor(cell).getRGB();
+            int foreRGB = attrToForegroundColor(cell);
+            int backRGB = attrToBackgroundColor(cell);
             int colorDistance = ImageUtils.rgbDistance(foreRGB, backRGB);
             if (colorDistance <= 32) {
                 cell.setForeColorRGB((Color.WHITE).darker().getRGB());
@@ -1776,7 +1768,7 @@ public class SwingTerminal extends LogicalScreen
             xPixel -= textWidth;
             break;
         }
-        gr.setColor(attrToForegroundColor(cell));
+        gr.setColor(new Color(attrToForegroundColor(cell)));
         switch (cursorStyle) {
         default:
             // Fall through...
@@ -2942,11 +2934,11 @@ public class SwingTerminal extends LogicalScreen
                 }
             }
 
-            gr2.setColor(attrToBackgroundColor(cellColor));
+            gr2.setColor(new Color(attrToBackgroundColor(cellColor)));
             gr2.fillRect(gr2x, gr2y, textWidth, textHeight);
 
             if (!cell.isCodePoint(' ')) {
-                gr2.setColor(attrToForegroundColor(cellColor));
+                gr2.setColor(new Color(attrToForegroundColor(cellColor)));
                 char [] chars = cell.toCharArray();
                 gr2.drawChars(chars, 0, chars.length, gr2x + textAdjustX,
                     gr2y + textHeight - maxDescent + textAdjustY);
@@ -3004,11 +2996,11 @@ public class SwingTerminal extends LogicalScreen
                 }
             }
 
-            gr2.setColor(attrToBackgroundColor(cellColor));
+            gr2.setColor(new Color(attrToBackgroundColor(cellColor)));
             gr2.fillRect(gr2x, gr2y, textWidth, textHeight);
 
             if (!cell.isCodePoint(' ')) {
-                gr2.setColor(attrToForegroundColor(cellColor));
+                gr2.setColor(new Color(attrToForegroundColor(cellColor)));
                 char [] chars = cell.toCharArray();
                 gr2.drawChars(chars, 0, chars.length, gr2x + textAdjustX,
                     gr2y + textHeight - maxDescent + textAdjustY);
@@ -3045,7 +3037,7 @@ public class SwingTerminal extends LogicalScreen
         Graphics2D gr = null;
         gr = glyphImage.createGraphics();
         gr.setFont(swing.getFont());
-        gr.setColor(attrToForegroundColor(cell));
+        gr.setColor(new Color(attrToForegroundColor(cell)));
         char [] chars = cell.toCharArray();
         gr.drawChars(chars, 0, chars.length, textAdjustX,
             textHeight - maxDescent + textAdjustY);
@@ -3078,7 +3070,7 @@ public class SwingTerminal extends LogicalScreen
                 }
             }
 
-            gr2.setColor(attrToBackgroundColor(cellColor));
+            gr2.setColor(new Color(attrToBackgroundColor(cellColor)));
             gr2.fillRect(gr2x, gr2y, textWidth, textHeight);
             gr2.drawImage(glyphImage, 0, 0, textWidth, textHeight, null);
             gr2.dispose();
@@ -3141,7 +3133,7 @@ public class SwingTerminal extends LogicalScreen
                 }
             }
 
-            gr2.setColor(attrToBackgroundColor(cellColor));
+            gr2.setColor(new Color(attrToBackgroundColor(cellColor)));
             gr2.fillRect(gr2x, gr2y, textWidth, textHeight);
 
             if (cell.isUnderline()) {
@@ -3184,7 +3176,7 @@ public class SwingTerminal extends LogicalScreen
             }
         }
 
-        gr.setColor(attrToBackgroundColor(cellColor));
+        gr.setColor(new Color(attrToBackgroundColor(cellColor)));
         gr.fillRect(0, 0, textWidth, textHeight);
         gr.dispose();
 
@@ -3258,7 +3250,7 @@ public class SwingTerminal extends LogicalScreen
                 }
             }
 
-            gr2.setColor(attrToBackgroundColor(cellColor));
+            gr2.setColor(new Color(attrToBackgroundColor(cellColor)));
             gr2.fillRect(gr2x, gr2y, textWidth, textHeight);
 
             if (cell.isUnderline()) {
@@ -3308,7 +3300,7 @@ public class SwingTerminal extends LogicalScreen
                 }
             }
 
-            gr2.setColor(attrToBackgroundColor(cellColor));
+            gr2.setColor(new Color(attrToBackgroundColor(cellColor)));
             gr2.fillRect(gr2x, gr2y, textWidth, textHeight);
 
             if (cell.isUnderline()) {

@@ -14,7 +14,6 @@
  */
 package casciian.effect;
 
-import java.awt.Color;
 import casciian.TWidget;
 import casciian.backend.Backend;
 import casciian.bits.Cell;
@@ -63,22 +62,22 @@ public class GradientCellTransform implements CellTransform {
     /**
      * Color at the top-left corner.
      */
-    private Color topLeft = null;
+    private int topLeft = -1;
 
     /**
      * Color at the top-right corner.
      */
-    private Color topRight = null;
+    private int topRight = -1;
 
     /**
      * Color at the bottom-left corner.
      */
-    private Color bottomLeft = null;
+    private int bottomLeft = -1;
 
     /**
      * Color at the bottom-right corner.
      */
-    private Color bottomRight = null;
+    private int bottomRight = -1;
 
     // applyTransform() cached values.
     private int width = 1;
@@ -98,8 +97,8 @@ public class GradientCellTransform implements CellTransform {
      * @param bottomRight color at the bottom-right corner
      */
     public GradientCellTransform(final Layer layer,
-        final Color topLeft, final Color topRight,
-        final Color bottomLeft, final Color bottomRight) {
+        final int topLeft, final int topRight,
+        final int bottomLeft, final int bottomRight) {
 
         this.layer       = layer;
         this.topLeft     = topLeft;
@@ -169,18 +168,31 @@ public class GradientCellTransform implements CellTransform {
         double bottomLeftWeight = (1.0 - rightWeight) * bottomWeight;
         double bottomRightWeight = rightWeight * bottomWeight;
 
-        int   red = (int) ((topLeft.getRed() * topLeftWeight)
-                         + (topRight.getRed() * topRightWeight)
-                         + (bottomLeft.getRed() * bottomLeftWeight)
-                         + (bottomRight.getRed() * bottomRightWeight));
-        int green = (int) ((topLeft.getGreen() * topLeftWeight)
-                         + (topRight.getGreen() * topRightWeight)
-                         + (bottomLeft.getGreen() * bottomLeftWeight)
-                         + (bottomRight.getGreen() * bottomRightWeight));
-        int  blue = (int) ((topLeft.getBlue() * topLeftWeight)
-                         + (topRight.getBlue() * topRightWeight)
-                         + (bottomLeft.getBlue() * bottomLeftWeight)
-                         + (bottomRight.getBlue() * bottomRightWeight));
+        int topLeftRed     = (    topLeft >>> 16) & 0xFF;
+        int topRightRed    = (   topRight >>> 16) & 0xFF;
+        int bottomLeftRed  = ( bottomLeft >>> 16) & 0xFF;
+        int bottomRightRed = (bottomRight >>> 16) & 0xFF;
+        int topLeftGreen     = (    topLeft >>> 8) & 0xFF;
+        int topRightGreen    = (   topRight >>> 8) & 0xFF;
+        int bottomLeftGreen  = ( bottomLeft >>> 8) & 0xFF;
+        int bottomRightGreen = (bottomRight >>> 8) & 0xFF;
+        int topLeftBlue     =     topLeft & 0xFF;
+        int topRightBlue    =    topRight & 0xFF;
+        int bottomLeftBlue  =  bottomLeft & 0xFF;
+        int bottomRightBlue = bottomRight & 0xFF;
+
+        int   red = (int) ((topLeftRed * topLeftWeight)
+                         + (topRightRed * topRightWeight)
+                         + (bottomLeftRed * bottomLeftWeight)
+                         + (bottomRightRed * bottomRightWeight));
+        int green = (int) ((topLeftGreen * topLeftWeight)
+                         + (topRightGreen * topRightWeight)
+                         + (bottomLeftGreen * bottomLeftWeight)
+                         + (bottomRightGreen * bottomRightWeight));
+        int  blue = (int) ((topLeftBlue * topLeftWeight)
+                         + (topRightBlue * topRightWeight)
+                         + (bottomLeftBlue * bottomLeftWeight)
+                         + (bottomRightBlue * bottomRightWeight));
 
         int rgb = (0xFF << 24) | (red << 16) | (green << 8) | blue;
         if (foreground) {
@@ -200,21 +212,21 @@ public class GradientCellTransform implements CellTransform {
      */
     private void processCorners() {
         // If only one color is set, all four corners will be that color.
-        Color oneColor = null;
+        int oneColor = -1;
         int colorCount = 0;
-        if (topLeft != null) {
+        if (topLeft != -1) {
             oneColor = topLeft;
             colorCount++;
         }
-        if (topRight != null) {
+        if (topRight != -1) {
             oneColor = topRight;
             colorCount++;
         }
-        if (bottomLeft != null) {
+        if (bottomLeft != -1) {
             oneColor = bottomLeft;
             colorCount++;
         }
-        if (bottomRight != null) {
+        if (bottomRight != -1) {
             oneColor = bottomRight;
             colorCount++;
         }
@@ -234,48 +246,48 @@ public class GradientCellTransform implements CellTransform {
             return;
         }
         if (colorCount == 3) {
-            if (topLeft == null) {
+            if (topLeft == -1) {
                 topLeft = colorAverage(bottomLeft, topRight);
             }
-            if (topRight == null) {
+            if (topRight == -1) {
                 topRight = colorAverage(bottomLeft, topLeft);
             }
-            if (bottomLeft == null) {
+            if (bottomLeft == -1) {
                 bottomLeft = colorAverage(topLeft, bottomRight);
             }
-            if (bottomRight == null) {
+            if (bottomRight == -1) {
                 bottomRight = colorAverage(bottomLeft, topLeft);
             }
             return;
         }
         assert (colorCount == 2);
 
-        if ((topLeft == null) && (topRight == null)) {
+        if ((topLeft == -1) && (topRight == -1)) {
             topLeft = bottomLeft;
             topRight = bottomRight;
             return;
         }
-        if ((bottomLeft == null) && (bottomRight == null)) {
+        if ((bottomLeft == -1) && (bottomRight == -1)) {
             bottomLeft = topLeft;
             bottomRight = topRight;
             return;
         }
-        if ((topLeft == null) && (bottomLeft == null)) {
+        if ((topLeft == -1) && (bottomLeft == -1)) {
             topLeft = topRight;
             bottomLeft = bottomRight;
             return;
         }
-        if ((topRight == null) && (bottomRight == null)) {
+        if ((topRight == -1) && (bottomRight == -1)) {
             topRight = topLeft;
             bottomRight = bottomLeft;
             return;
         }
-        if ((topLeft == null) && (bottomRight == null)) {
+        if ((topLeft == -1) && (bottomRight == -1)) {
             topLeft = colorAverage(topRight, bottomLeft);
             bottomRight = topLeft;
             return;
         }
-        if ((topRight == null) && (bottomLeft == null)) {
+        if ((topRight == -1) && (bottomLeft == -1)) {
             topRight = colorAverage(topLeft, bottomRight);
             bottomLeft = topRight;
             return;
@@ -288,10 +300,20 @@ public class GradientCellTransform implements CellTransform {
      * @param color1 the first color
      * @param color2 the second color
      */
-    private Color colorAverage(final Color color1, final Color color2) {
-        return new Color((color1.getRed() + color2.getRed() / 2),
-            (color1.getGreen() + color2.getGreen() / 2),
-            (color1.getBlue() + color2.getBlue() / 2));
+    private int colorAverage(final int color1, final int color2) {
+        int color1Red   = (    color1 >>> 16) & 0xFF;
+        int color2Red   = (    color2 >>> 16) & 0xFF;
+        int color1Green = (    color1 >>> 8) & 0xFF;
+        int color2Green = (    color2 >>> 8) & 0xFF;
+        int color1Blue  =      color1 & 0xFF;
+        int color2Blue  =      color2 & 0xFF;
+
+
+        int red   = (color1Red + color2Red) / 2;
+        int green = (color1Green + color2Green) / 2;
+        int blue  = (color1Blue + color2Blue) / 2;
+        int rgb = (red << 16) | (green << 8) | blue;
+        return rgb;
     }
 
 }

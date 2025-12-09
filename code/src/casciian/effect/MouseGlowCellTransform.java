@@ -14,7 +14,6 @@
  */
 package casciian.effect;
 
-import java.awt.Color;
 import casciian.TWidget;
 import casciian.backend.Backend;
 import casciian.bits.Cell;
@@ -62,9 +61,9 @@ public class MouseGlowCellTransform implements CellTransform {
     private Layer layer = Layer.BACKGROUND;
 
     /**
-     * Color to use for the glow effect.
+     * RGB color to use for the glow effect.
      */
-    private Color glowColor = null;
+    private int glowColor = -1;
 
     /*
      * Maximum horizontal cell distance to have the glow
@@ -89,11 +88,11 @@ public class MouseGlowCellTransform implements CellTransform {
      * Public constructor.
      *
      * @param layer layer to apply glow effect to
-     * @param glowColor color of the glow
+     * @param glowColor RGB color of the glow
      * @param glowDistance maximum horizontal cell distance to have the glow
      * effect
      */
-    public MouseGlowCellTransform(final Layer layer, final Color glowColor,
+    public MouseGlowCellTransform(final Layer layer, final int glowColor,
         final int glowDistance) {
 
         this.layer        = layer;
@@ -187,16 +186,16 @@ public class MouseGlowCellTransform implements CellTransform {
         }
 
         double brightFraction = 1.0 - ((double) distance / glowDistance);
-        int glowRgb = glowColor.getRGB();
+        int glowRgb = glowColor;
 
         if (foreground) {
-            int foreColorRgb = backend.attrToForegroundColor(cell).getRGB();
+            int foreColorRgb = backend.attrToForegroundColor(cell);
             cell.setForeColorRGB(ImageUtils.rgbMove(foreColorRgb, glowRgb,
                     brightFraction));
         }
 
         if (background) {
-            int backColorRgb = backend.attrToBackgroundColor(cell).getRGB();
+            int backColorRgb = backend.attrToBackgroundColor(cell);
             cell.setBackColorRGB(ImageUtils.rgbMove(backColorRgb, glowRgb,
                     brightFraction));
         }

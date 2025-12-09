@@ -1699,17 +1699,17 @@ public class LogicalScreen implements Screen {
                     int thisBg = cell.getBackColorRGB();
                     if (thisBg < 0) {
                         if (backend != null) {
-                            thisBg = backend.attrToBackgroundColor(cell).getRGB();
+                            thisBg = backend.attrToBackgroundColor(cell);
                         } else {
-                            thisBg = SwingTerminal.attrToBackgroundColor(cell).getRGB();
+                            thisBg = SwingTerminal.attrToBackgroundColor(cell);
                         }
                     }
                     int thisFg = cell.getForeColorRGB();
                     if (thisFg < 0) {
                         if (backend != null) {
-                            thisFg = backend.attrToForegroundColor(cell).getRGB();
+                            thisFg = backend.attrToForegroundColor(cell);
                         } else {
-                            thisFg = SwingTerminal.attrToForegroundColor(cell).getRGB();
+                            thisFg = SwingTerminal.attrToForegroundColor(cell);
                         }
                     }
 
@@ -1719,17 +1719,17 @@ public class LogicalScreen implements Screen {
                         overFg = over.getForeColorPulseRGB(backend, now);
                     } else if (overFg < 0) {
                         if (backend != null) {
-                            overFg = backend.attrToForegroundColor(over).getRGB();
+                            overFg = backend.attrToForegroundColor(over);
                         } else {
-                            overFg = SwingTerminal.attrToForegroundColor(over).getRGB();
+                            overFg = SwingTerminal.attrToForegroundColor(over);
                         }
                     }
                     int overBg = over.getBackColorRGB();
                     if (overBg < 0) {
                         if (backend != null) {
-                            overBg = backend.attrToBackgroundColor(over).getRGB();
+                            overBg = backend.attrToBackgroundColor(over);
                         } else {
-                            overBg = SwingTerminal.attrToBackgroundColor(over).getRGB();
+                            overBg = SwingTerminal.attrToBackgroundColor(over);
                         }
                     }
                     thisFg |= OPAQUE;

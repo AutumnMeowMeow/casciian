@@ -14,7 +14,6 @@
  */
 package demo;
 
-import java.awt.Color;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -171,12 +170,12 @@ public class DemoCheckBoxWindow extends TWindow {
      */
     public void setUseGradient(final boolean useGradient) {
         if (useGradient) {
-            Color PINK = new Color(0xf7, 0xa8, 0xb8);
-            Color BLUE = new Color(0x55, 0xcd, 0xfc);
+            int PINK = 0xac7580;
+            int BLUE = 0x3b8fb0;
+            int YELLOW = 0x7c7c00;
             setDrawPreTransform(new GradientCellTransform(
-                GradientCellTransform.Layer.BACKGROUND, PINK.darker(),
-                BLUE.darker(), Color.YELLOW.darker().darker(),
-                BLUE.darker()), true);
+                GradientCellTransform.Layer.BACKGROUND, PINK,
+                BLUE, YELLOW, BLUE), true);
         } else {
             setDrawPreTransform(null);
         }

@@ -1376,13 +1376,13 @@ public class ECMA48 implements Runnable {
             CellAttributes attr = new CellAttributes();
             for (int i = 0; i < 8; i++) {
                 attr.setForeColor(Color.getSgrColor(i));
-                colors88.set(i, backend.attrToForegroundColor(attr).getRGB());
+                colors88.set(i, backend.attrToForegroundColor(attr));
             }
             attr.setBold(true);
             for (int i = 0; i < 8; i++) {
                 attr.setForeColor(Color.getSgrColor(i));
                 colors88.set(i + 8,
-                    backend.attrToForegroundColor(attr).getRGB());
+                    backend.attrToForegroundColor(attr));
             }
         } else {
             // Set default system colors.  These match DOS colors.
@@ -5370,24 +5370,32 @@ public class ECMA48 implements Runnable {
                 if (p[0].equals("10")) {
                     if ((p.length > 1) && p[1].equals("?")) {
                         // Respond with foreground color.
-                        java.awt.Color color = backend.attrToForegroundColor(currentState.attr);
+                        int rgb = backend.attrToForegroundColor(currentState.attr);
+                        int red   = (rgb >>> 16) & 0xFF;
+                        int green = (rgb >>>  8) & 0xFF;
+                        int blue  =  rgb         & 0xFF;
+
                         writeRemote(String.format(
                             "%s10;rgb:%04x/%04x/%04x%s", OSC,
-                                color.getRed() << 8,
-                                color.getGreen() << 8,
-                                color.getBlue() << 8, ST));
+                                red << 8,
+                                green << 8,
+                                blue << 8, ST));
                     }
                 }
 
                 if (p[0].equals("11")) {
                     if ((p.length > 1) && p[1].equals("?")) {
                         // Respond with background color.
-                        java.awt.Color color = backend.attrToBackgroundColor(currentState.attr);
+                        int rgb = backend.attrToBackgroundColor(currentState.attr);
+                        int red   = (rgb >>> 16) & 0xFF;
+                        int green = (rgb >>>  8) & 0xFF;
+                        int blue  =  rgb         & 0xFF;
+
                         writeRemote(String.format(
                             "%s11;rgb:%04x/%04x/%04x%s", OSC,
-                                color.getRed() << 8,
-                                color.getGreen() << 8,
-                                color.getBlue() << 8, ST));
+                                red << 8,
+                                green << 8,
+                                blue << 8, ST));
                     }
                 }
 

@@ -279,10 +279,10 @@ public class TButton extends TWidget {
 
         buttonColor = new CellAttributes(buttonColor);
         buttonColor.setForeColorRGB(getScreen().getBackend().
-            attrToForegroundColor(buttonColor).getRGB());
+            attrToForegroundColor(buttonColor));
         mnemonicColor = new CellAttributes(mnemonicColor);
         mnemonicColor.setForeColorRGB(getScreen().getBackend().
-            attrToForegroundColor(mnemonicColor).getRGB());
+            attrToForegroundColor(mnemonicColor));
 
         // Pulse colors.
         if (isActive() && getWindow().isActive()
@@ -290,12 +290,11 @@ public class TButton extends TWidget {
         ) {
             buttonColor.setPulse(true, false, 0);
             buttonColor.setPulseColorRGB(getScreen().getBackend().
-                attrToForegroundColor(getTheme().getColor(
-                    "tbutton.pulse")).getRGB());
+                attrToForegroundColor(getTheme().getColor("tbutton.pulse")));
             mnemonicColor.setPulse(true, false, 0);
             mnemonicColor.setPulseColorRGB(getScreen().getBackend().
                 attrToForegroundColor(getTheme().getColor(
-                    "tbutton.mnemonic.pulse")).getRGB());
+                    "tbutton.mnemonic.pulse")));
         }
 
         Cell leftEdge = getLeftEdge(buttonColor);

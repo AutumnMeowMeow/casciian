@@ -308,23 +308,23 @@ public class ECMA48Terminal extends LogicalScreen
      */
     private Object listener;
 
-    // Colors to map DOS colors to AWT colors.
-    private java.awt.Color MYBLACK;
-    private java.awt.Color MYRED;
-    private java.awt.Color MYGREEN;
-    private java.awt.Color MYYELLOW;
-    private java.awt.Color MYBLUE;
-    private java.awt.Color MYMAGENTA;
-    private java.awt.Color MYCYAN;
-    private java.awt.Color MYWHITE;
-    private java.awt.Color MYBOLD_BLACK;
-    private java.awt.Color MYBOLD_RED;
-    private java.awt.Color MYBOLD_GREEN;
-    private java.awt.Color MYBOLD_YELLOW;
-    private java.awt.Color MYBOLD_BLUE;
-    private java.awt.Color MYBOLD_MAGENTA;
-    private java.awt.Color MYBOLD_CYAN;
-    private java.awt.Color MYBOLD_WHITE;
+    // RGB colors matching the DOS/CGA colors.
+    private int MYBLACK;
+    private int MYRED;
+    private int MYGREEN;
+    private int MYYELLOW;
+    private int MYBLUE;
+    private int MYMAGENTA;
+    private int MYCYAN;
+    private int MYWHITE;
+    private int MYBOLD_BLACK;
+    private int MYBOLD_RED;
+    private int MYBOLD_GREEN;
+    private int MYBOLD_YELLOW;
+    private int MYBOLD_BLUE;
+    private int MYBOLD_MAGENTA;
+    private int MYBOLD_CYAN;
+    private int MYBOLD_WHITE;
 
     // ------------------------------------------------------------------------
     // Constructors -----------------------------------------------------------
@@ -2051,99 +2051,100 @@ public class ECMA48Terminal extends LogicalScreen
                     System.err.printf("    RGB %02x%02x%02x\n",
                         red, green, blue);
                 }
+                int rgbColor = red << 16 | green << 8 | blue;
                 switch (color) {
                 case 0:
-                    MYBLACK   = new java.awt.Color(red, green, blue);
+                    MYBLACK   = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BLACK");
                     }
                     break;
                 case 1:
-                    MYRED     = new java.awt.Color(red, green, blue);
+                    MYRED     = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set RED");
                     }
                     break;
                 case 2:
-                    MYGREEN   = new java.awt.Color(red, green, blue);
+                    MYGREEN   = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set GREEN");
                     }
                     break;
                 case 3:
-                    MYYELLOW  = new java.awt.Color(red, green, blue);
+                    MYYELLOW  = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set YELLOW");
                     }
                     break;
                 case 4:
-                    MYBLUE    = new java.awt.Color(red, green, blue);
+                    MYBLUE    = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BLUE");
                     }
                     break;
                 case 5:
-                    MYMAGENTA = new java.awt.Color(red, green, blue);
+                    MYMAGENTA = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set MAGENTA");
                     }
                     break;
                 case 6:
-                    MYCYAN    = new java.awt.Color(red, green, blue);
+                    MYCYAN    = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set CYAN");
                     }
                     break;
                 case 7:
-                    MYWHITE   = new java.awt.Color(red, green, blue);
+                    MYWHITE   = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set WHITE");
                     }
                     break;
                 case 8:
-                    MYBOLD_BLACK   = new java.awt.Color(red, green, blue);
+                    MYBOLD_BLACK   = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD BLACK");
                     }
                     break;
                 case 9:
-                    MYBOLD_RED     = new java.awt.Color(red, green, blue);
+                    MYBOLD_RED     = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD RED");
                     }
                     break;
                 case 10:
-                    MYBOLD_GREEN   = new java.awt.Color(red, green, blue);
+                    MYBOLD_GREEN   = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD GREEN");
                     }
                     break;
                 case 11:
-                    MYBOLD_YELLOW  = new java.awt.Color(red, green, blue);
+                    MYBOLD_YELLOW  = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD YELLOW");
                     }
                     break;
                 case 12:
-                    MYBOLD_BLUE    = new java.awt.Color(red, green, blue);
+                    MYBOLD_BLUE    = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD BLUE");
                     }
                     break;
                 case 13:
-                    MYBOLD_MAGENTA = new java.awt.Color(red, green, blue);
+                    MYBOLD_MAGENTA = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD MAGENTA");
                     }
                     break;
                 case 14:
-                    MYBOLD_CYAN    = new java.awt.Color(red, green, blue);
+                    MYBOLD_CYAN    = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD CYAN");
                     }
                     break;
                 case 15:
-                    MYBOLD_WHITE   = new java.awt.Color(red, green, blue);
+                    MYBOLD_WHITE   = rgbColor;
                     if (debugToStderr) {
                         System.err.println("    Set BOLD WHITE");
                     }
@@ -2740,22 +2741,22 @@ public class ECMA48Terminal extends LogicalScreen
      * Setup system colors to match DOS color palette.
      */
     private void setDOSColors() {
-        MYBLACK         = new java.awt.Color(0x00, 0x00, 0x00);
-        MYRED           = new java.awt.Color(0xa8, 0x00, 0x00);
-        MYGREEN         = new java.awt.Color(0x00, 0xa8, 0x00);
-        MYYELLOW        = new java.awt.Color(0xa8, 0x54, 0x00);
-        MYBLUE          = new java.awt.Color(0x00, 0x00, 0xa8);
-        MYMAGENTA       = new java.awt.Color(0xa8, 0x00, 0xa8);
-        MYCYAN          = new java.awt.Color(0x00, 0xa8, 0xa8);
-        MYWHITE         = new java.awt.Color(0xa8, 0xa8, 0xa8);
-        MYBOLD_BLACK    = new java.awt.Color(0x54, 0x54, 0x54);
-        MYBOLD_RED      = new java.awt.Color(0xfc, 0x54, 0x54);
-        MYBOLD_GREEN    = new java.awt.Color(0x54, 0xfc, 0x54);
-        MYBOLD_YELLOW   = new java.awt.Color(0xfc, 0xfc, 0x54);
-        MYBOLD_BLUE     = new java.awt.Color(0x54, 0x54, 0xfc);
-        MYBOLD_MAGENTA  = new java.awt.Color(0xfc, 0x54, 0xfc);
-        MYBOLD_CYAN     = new java.awt.Color(0x54, 0xfc, 0xfc);
-        MYBOLD_WHITE    = new java.awt.Color(0xfc, 0xfc, 0xfc);
+        MYBLACK         = 0x000000;
+        MYRED           = 0xa80000;
+        MYGREEN         = 0x00a800;
+        MYYELLOW        = 0xa85400;
+        MYBLUE          = 0x0000a8;
+        MYMAGENTA       = 0xa800a8;
+        MYCYAN          = 0x00a8a8;
+        MYWHITE         = 0xa8a8a8;
+        MYBOLD_BLACK    = 0x545454;
+        MYBOLD_RED      = 0xfc5454;
+        MYBOLD_GREEN    = 0x54fc54;
+        MYBOLD_YELLOW   = 0xfcfc54;
+        MYBOLD_BLUE     = 0x5454fc;
+        MYBOLD_MAGENTA  = 0xfc54fc;
+        MYBOLD_CYAN     = 0x54fcfc;
+        MYBOLD_WHITE    = 0xfcfcfc;
     }
 
     /**
@@ -2789,8 +2790,7 @@ public class ECMA48Terminal extends LogicalScreen
      * incorrect
      * @return a color from the RGB string, or defaultColor
      */
-    private java.awt.Color getCustomColor(final String key,
-        final java.awt.Color defaultColor) {
+    private int getCustomColor(final String key, final int defaultColor) {
 
         String rgb = System.getProperty(key);
         if (rgb == null) {
@@ -2805,27 +2805,19 @@ public class ECMA48Terminal extends LogicalScreen
         } catch (NumberFormatException e) {
             return defaultColor;
         }
-        java.awt.Color color = new java.awt.Color((rgbInt & 0xFF0000) >>> 16,
-            (rgbInt & 0x00FF00) >>> 8,
-            (rgbInt & 0x0000FF));
-
-        return color;
+        return rgbInt;
     }
 
     /**
-     * Convert a CellAttributes foreground color to an AWT Color.
+     * Convert a CellAttributes foreground color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public java.awt.Color attrToForegroundColor(final CellAttributes attr) {
+    public int attrToForegroundColor(final CellAttributes attr) {
         int rgb = attr.getForeColorRGB();
         if (rgb >= 0) {
-            int red     = (rgb >>> 16) & 0xFF;
-            int green   = (rgb >>>  8) & 0xFF;
-            int blue    =  rgb         & 0xFF;
-
-            return new java.awt.Color(red, green, blue);
+            return rgb;
         }
 
         if (attr.isBold()) {
@@ -2870,19 +2862,15 @@ public class ECMA48Terminal extends LogicalScreen
     }
 
     /**
-     * Convert a CellAttributes background color to an AWT Color.
+     * Convert a CellAttributes background color to an RGB color.
      *
      * @param attr the text attributes
-     * @return the AWT Color
+     * @return the RGB color
      */
-    public java.awt.Color attrToBackgroundColor(final CellAttributes attr) {
+    public int attrToBackgroundColor(final CellAttributes attr) {
         int rgb = attr.getBackColorRGB();
         if (rgb >= 0) {
-            int red     = (rgb >>> 16) & 0xFF;
-            int green   = (rgb >>>  8) & 0xFF;
-            int blue    =  rgb         & 0xFF;
-
-            return new java.awt.Color(red, green, blue);
+            return rgb;
         }
 
         if (attr.getBackColor().equals(Color.BLACK)) {
@@ -2909,13 +2897,16 @@ public class ECMA48Terminal extends LogicalScreen
     /**
      * Create a T.416 RGB parameter sequence for a custom system color.
      *
-     * @param color one of the MYBLACK, MYBOLD_BLUE, etc. colors
+     * @param colorRGB one of the MYBLACK, MYBOLD_BLUE, etc. colors
      * @return the color portion of the string to emit to an ANSI /
      * ECMA-style terminal
      */
-    private String systemColorRGB(final java.awt.Color color) {
-        return String.format("%d;%d;%d", color.getRed(), color.getGreen(),
-            color.getBlue());
+    private String systemColorRGB(final int colorRGB) {
+        int colorRed     = (colorRGB >>> 16) & 0xFF;
+        int colorGreen   = (colorRGB >>>  8) & 0xFF;
+        int colorBlue    =  colorRGB         & 0xFF;
+
+        return String.format("%d;%d;%d", colorRed, colorGreen, colorBlue);
     }
 
     /**
