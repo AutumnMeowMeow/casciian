@@ -62,30 +62,6 @@ tasks.jar {
     }
 }
 
-// Demo JAR: only demo code/resources, with Main-Class demo.Demo1
-tasks.register('jarDemo', Jar) {
-    group = 'build'
-    description = 'Assembles the demo application JAR containing only demo/**.'
-
-    from(sourceSets.main.output) {
-        exclude 'casciian/**'
-        exclude 'module-info.class'
-    }
-
-    archiveBaseName.set('casciian-demo')
-    manifest {
-        attributes(
-                'Main-Class': 'demo.Demo1',
-                'Implementation-Version': project.version
-        )
-    }
-}
-
-// Build both JARs with assemble
-tasks.assemble {
-    dependsOn tasks.named('jarDemo')
-}
-
 // Full JAR: includes EVERYTHING (library + demo), not published
 tasks.register('jarFull', Jar) {
     group = 'build'
@@ -138,37 +114,6 @@ publishing {
                 }
             }
         }
-        // Separate publication for the demo artifact
-        casciianDemo(MavenPublication) {
-            artifact tasks.named('jarDemo')
-            artifactId = 'casciian-demo'
-
-            pom {
-                name = 'casciian-demo'
-                description = 'Demo application for Casciian - Java Text User Interface'
-                url = 'https://github.com/crramirez/casciian'
-
-                licenses {
-                    license {
-                        name = 'MIT License'
-                        url = 'https://opensource.org/licenses/MIT'
-                        distribution = 'repo'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'crramirez'
-                        name = 'crramirez'
-                        url = 'https://github.com/crramirez'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/crramirez/casciian'
-                    connection = 'scm:git:https://github.com/crramirez/casciian.git'
-                    developerConnection = 'scm:git:ssh://git@github.com/crramirez/casciian.git'
-                }
-            }
-        }
     }
     repositories {
         maven {
@@ -198,8 +143,7 @@ tasks.register('publishToLocalStaging') {
     group = 'publishing'
     description = 'Publishes signed artifacts to build/staging-repo (for Central Portal bundling).'
     dependsOn(
-            'publishMavenJavaPublicationToLocalStagingRepository',
-            'publishCasciianDemoPublicationToLocalStagingRepository'
+            'publishMavenJavaPublicationToLocalStagingRepository'
     )
 }
 
@@ -243,7 +187,6 @@ graalvmNative {
             }
 
             imageName = 'casciian'
-            mainClass = 'demo.Demo1'
             buildArgs.add('--static')
             buildArgs.addAll(providers.provider {
                 [

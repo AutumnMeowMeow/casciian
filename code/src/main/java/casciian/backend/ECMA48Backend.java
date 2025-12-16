@@ -229,7 +229,7 @@ public class ECMA48Backend extends GenericBackend {
      * @return the RGB color
      */
     public int getDefaultForeColorRGB() {
-        return ((ECMA48Terminal) terminal).getDefaultForeColorRGB();
+        return ECMA48Terminal.getDefaultForeColorRGB();
     }
 
     /**
@@ -238,7 +238,7 @@ public class ECMA48Backend extends GenericBackend {
      * @return the RGB color
      */
     public int getDefaultBackColorRGB() {
-        return ((ECMA48Terminal) terminal).getDefaultBackColorRGB();
+        return ECMA48Terminal.getDefaultBackColorRGB();
     }
 
 }
