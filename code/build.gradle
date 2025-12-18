@@ -214,7 +214,8 @@ graalvmNative {
             }
 
             imageName = 'casciian'
-            buildArgs.add('--static')
+            buildArgs.add('-march=compatibility')
+            buildArgs.add('--strict-image-heap')
             buildArgs.addAll(providers.provider {
                 [
                     '-cp',
