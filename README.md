@@ -20,6 +20,8 @@ Casciian has seen inspiration from several other projects:
   inspired by [vtm's](https://github.com/netxs-group/vtm) incredibly
   slick game-like aesthetic.
 
+<img width="1612" height="996" alt="image" src="https://github.com/user-attachments/assets/69312af6-36b3-46a2-a4c9-d77a1e804e68" />
+
 ## License
 
 This project is distributed under the Apache License, Version 2.0.
